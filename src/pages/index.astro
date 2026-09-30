@@ -1,6 +1,257 @@
 ---
-// Temporal (Fase 1): la Home definitiva llega en la Fase 2
+// Home: mismo flujo que el sitio actual (banner → intro → autos en venta →
+// ¿Qué necesitas? → instalaciones → marcas → footer), rediseñado.
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Icon from '../components/Icon.astro';
+import { brands, site } from '../data/site';
+
+// Solo fotos originales de Argomedo
+import lambo from '../../assets/fotos-originales/biblioteca/2013-08/20130827_114447.jpg';
+import lambo2 from '../../assets/fotos-originales/biblioteca/2013-08/20130827_114328-1.jpg';
+import lambo3 from '../../assets/fotos-originales/biblioteca/2013-08/20130827_114634.jpg';
+import lambo4 from '../../assets/fotos-originales/biblioteca/2013-08/20130827_114720.jpg';
+import servicios from '../../assets/fotos-originales/tema/servicios.jpg';
+import productos from '../../assets/fotos-originales/biblioteca/2011-09/26.jpg';
+import equipo from '../../assets/fotos-originales/biblioteca/2011-09/equipo_aromedo.jpg';
+import instalaciones from '../../assets/fotos-originales/tema/showroom.jpg';
+import sala from '../../assets/fotos-originales/biblioteca/2011-09/sala_reuniones_argomedo_2.jpg';
+
+const carGallery = [
+  { src: lambo2, alt: 'Lamborghini Gallardo LP560-4 blanco, vista frontal' },
+  { src: lambo3, alt: 'Lamborghini Gallardo LP560-4 blanco, vista trasera' },
+  { src: lambo4, alt: 'Lamborghini Gallardo LP560-4 blanco, frontal en el showroom' },
+];
 ---
-<meta http-equiv="refresh" content="0; url=/sistema/" />
-<meta name="robots" content="noindex" />
-<a href="/sistema/">Ver sistema visual</a>
+<Base
+  title="Argomedo Performance | Taller de autos de lujo y alto rendimiento en Santiago"
+  description="Taller familiar en Recoleta desde 1970. Mecánica de alto rendimiento, repuestos importados, restauración de clásicos y venta de autos de lujo con garantía profesional."
+>
+  <Hero />
+
+  <!-- Intro (hoy: “Una Empresa, Un Equipo, Pensado en ti”) -->
+  <section class="section container intro center" aria-labelledby="intro-t">
+    <img class="intro__badge" src="/brand/escudo-color.png" alt="" width="64" height="52" loading="lazy" data-reveal />
+    <h2 id="intro-t" class="t-h2" data-reveal style="--d:60ms">Una empresa, un equipo,<br /><span class="t-soft">pensado en ti.</span></h2>
+    <p class="t-lead" data-reveal style="--d:120ms">
+      Argomedo Performance es una empresa para los amantes de la mecánica. Desde 1970, la ingeniería de punta y la pasión de nuestros clientes conviven en nuestro taller de Recoleta.
+    </p>
+    <a class="link" href="/argomedo/equipo/" data-reveal style="--d:180ms">Conoce nuestro equipo <Icon name="arrow" /></a>
+  </section>
+
+  <!-- Últimos autos en venta -->
+  <section class="section section--tint" aria-labelledby="autos-t">
+    <div class="container">
+      <header class="head center">
+        <p class="label">Showroom</p>
+        <h2 id="autos-t" class="t-h2">Últimos autos en venta.</h2>
+      </header>
+
+      <article class="car" data-reveal>
+        <div class="car__media photo">
+          <Image src={lambo} alt="Lamborghini Gallardo LP560-4 blanco en el showroom de Argomedo Performance" widths={[640, 1050]} sizes="(max-width: 899px) 100vw, 640px" />
+          <span class="car__badge label"><span class="dot"></span>Disponible</span>
+        </div>
+        <div class="car__info">
+          <p class="label">Lamborghini · <span class="num">2010</span></p>
+          <h3 class="t-h3">Gallardo LP560-4 New Look</h3>
+          <dl class="car__specs">
+            <div><dt>Color</dt><dd>Blanco</dd></div>
+            <div><dt>Kilometraje</dt><dd class="num">0 millas</dd></div>
+            <div><dt>Precio</dt><dd>A consultar</dd></div>
+          </dl>
+          <div class="car__thumbs">
+            {carGallery.map((g) => (
+              <div class="photo"><Image src={g.src} alt={g.alt} width={320} loading="lazy" /></div>
+            ))}
+          </div>
+          <div class="car__ctas">
+            <a class="btn btn--primary" href="/contacto/?motivo=cotizacion&auto=Lamborghini%20Gallardo%20LP560-4">Consultar por este auto</a>
+            <a class="link" href="/showroom/autos-en-venta/">Ver showroom <Icon name="arrow" /></a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ¿Qué necesitas? -->
+  <section class="section container" aria-labelledby="need-t">
+    <header class="head center">
+      <p class="label">Servicios</p>
+      <h2 id="need-t" class="t-h2">¿Qué necesitas?</h2>
+      <p class="t-lead">Mecánica, repuestos e importación para autos de lujo, deportivos y clásicos.</p>
+    </header>
+
+    <div class="tiles">
+      <a class="tile tile--wide" href="/servicios/" data-reveal>
+        <div class="tile__text">
+          <h3 class="t-h3">Ingeniería automotriz y mecánica de alta calidad.</h3>
+          <span class="link">Revisa nuestros servicios <Icon name="arrow" /></span>
+        </div>
+        <div class="tile__media photo"><Image src={servicios} alt="Parche bordado con el escudo de Argomedo Performance" widths={[640, 960]} sizes="(max-width: 899px) 100vw, 1200px" loading="lazy" /></div>
+      </a>
+
+      <a class="tile" href="/servicios/#repuestos" data-reveal style="--d:60ms">
+        <div class="tile__text">
+          <p class="label">Nuestros productos</p>
+          <h3 class="t-h4">Importación directa de repuestos y accesorios de las mejores marcas.</h3>
+          <span class="link">Ver productos <Icon name="arrow" /></span>
+        </div>
+        <div class="tile__media photo"><Image src={productos} alt="Rueda de auto de competición en el taller de Argomedo Performance" width={556} loading="lazy" /></div>
+      </a>
+
+      <a class="tile" href="/argomedo/equipo/" data-reveal style="--d:120ms">
+        <div class="tile__text">
+          <p class="label">Equipo Argomedo</p>
+          <h3 class="t-h4">Calidad y profesionalismo para tu seguridad y la de tu automóvil.</h3>
+          <span class="link">Conoce al equipo <Icon name="arrow" /></span>
+        </div>
+        <div class="tile__media photo"><Image src={equipo} alt="Equipo de Argomedo Performance en el showroom" width={556} loading="lazy" /></div>
+      </a>
+
+      <a class="row-link" href="/argomedo/en-la-prensa/" data-reveal>
+        <span><span class="label">Argomedo</span><strong>En la prensa</strong></span>
+        <span class="row-link__meta t-small">El Mercurio · La Segunda · LUN</span>
+        <Icon name="arrow" />
+      </a>
+      <a class="row-link" href="/contacto/" data-reveal style="--d:60ms">
+        <span><span class="label">Consultas</span><strong>Te escuchamos</strong></span>
+        <span class="row-link__meta t-small">{site.phone}</span>
+        <Icon name="arrow" />
+      </a>
+    </div>
+  </section>
+
+  <!-- Instalaciones -->
+  <section class="section section--tint" aria-labelledby="inst-t">
+    <div class="container">
+      <header class="head center">
+        <p class="label">{site.address.street} · {site.address.locality}</p>
+        <h2 id="inst-t" class="t-h2">Nuestras instalaciones.</h2>
+        <p class="t-lead">Oficinas, taller mecánico y taller de fabricación de partes y piezas en el mismo lugar desde 1970.</p>
+      </header>
+
+      <div class="photo inst__hero" data-reveal>
+        <Image src={instalaciones} alt="Showroom de Argomedo Performance con autos deportivos" widths={[640, 960]} sizes="(max-width: 1280px) 100vw, 1200px" loading="lazy" />
+      </div>
+
+      <div class="inst__grid">
+        <div class="tile tile--white" data-reveal>
+          <div class="tile__text">
+            <p class="label">Visítanos</p>
+            <h3 class="t-h4">Negocios, compra y venta. Te esperamos en nuestra sala de reuniones.</h3>
+            <div class="inst__links">
+              <a class="link" href="/contacto/ubicacion/">Cómo llegar <Icon name="arrow" /></a>
+              <a class="btn btn--sm btn--secondary" href={site.mapsUrl} target="_blank" rel="noopener"><Icon name="maps" size={14} />Maps</a>
+              <a class="btn btn--sm btn--secondary" href={site.wazeUrl} target="_blank" rel="noopener"><Icon name="waze" size={14} />Waze</a>
+            </div>
+          </div>
+          <div class="tile__media photo"><Image src={sala} alt="Sala de reuniones de Argomedo Performance" width={556} loading="lazy" /></div>
+        </div>
+
+        <a class="tile tile--ink" href="/contacto/?motivo=importacion" data-reveal style="--d:80ms">
+          <div class="tile__text">
+            <p class="label">Importación directa</p>
+            <h3 class="t-h3">Las grandes marcas, directamente para ti.</h3>
+            <p class="t-small">Traemos repuestos y accesorios originales para tu auto, sin intermediarios.</p>
+            <span class="link link--light">Cotizar una importación <Icon name="arrow" /></span>
+          </div>
+          <span class="tile__line" aria-hidden="true"></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marcas -->
+  <section class="section container marcas center" aria-labelledby="marcas-t">
+    <h2 id="marcas-t" class="t-h4">Las grandes marcas <span class="t-soft">directamente para ti.</span></h2>
+    <ul class="marcas__list" data-reveal>
+      {brands.map((b) => <li><img src={b.src} alt={b.name} style={`--h:${b.h}px`} loading="lazy" /></li>)}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .section--tint { background: var(--surface); }
+  .head { display: grid; gap: 0.75rem; max-width: 42rem; margin-bottom: clamp(2.5rem, 5vw, 3.75rem); }
+  .head .t-lead { margin-top: 0.25rem; }
+
+  /* Intro */
+  .intro { display: grid; justify-items: center; gap: 1.25rem; max-width: 46rem; }
+  .intro__badge { width: 64px; margin-bottom: 0.5rem; }
+  .intro .t-lead { max-width: 36rem; }
+
+  /* Auto en venta */
+  .car { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; background: var(--bg); border-radius: var(--radius-l); padding: clamp(0.75rem, 1.5vw, 1rem); }
+  .car__media { aspect-ratio: 4 / 3; border-radius: calc(var(--radius-l) - 8px); }
+  .car__badge { position: absolute; top: 0.9rem; left: 0.9rem; padding: 0.35rem 0.7rem; border-radius: var(--radius-pill); background: var(--glass); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); color: var(--ink); font-size: 0.6875rem; }
+  .car__info { display: grid; gap: 1rem; padding: 1rem clamp(0.5rem, 2vw, 1.5rem) 1rem 0; }
+  .car__specs { display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--hairline); padding-block: 1rem; margin-top: 0.25rem; }
+  .car__specs div { display: grid; gap: 0.2rem; }
+  .car__specs dt { font-size: var(--fs-label); color: var(--text-3); }
+  .car__specs dd { font-size: 0.9375rem; font-weight: 500; }
+  .car__thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .car__thumbs .photo { aspect-ratio: 4 / 3; border-radius: var(--radius-s); }
+  .car__ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; margin-top: 0.5rem; }
+  @media (max-width: 899px) {
+    .car { grid-template-columns: 1fr; }
+    .car__info { padding: 0.5rem 0.75rem 1rem; }
+  }
+
+  /* Tiles tipo apple.com: texto centrado arriba, foto abajo */
+  .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .tile {
+    position: relative; overflow: hidden;
+    display: grid; grid-template-rows: auto 1fr; gap: 1.5rem;
+    background: var(--surface); border-radius: var(--radius-l);
+    padding-top: clamp(2rem, 4vw, 3rem); text-align: center;
+    transition: transform var(--dur) var(--ease-out);
+  }
+  .tile__text { display: grid; justify-items: center; gap: 0.6rem; padding-inline: clamp(1.5rem, 4vw, 3rem); max-width: 34rem; margin-inline: auto; }
+  .tile__media { align-self: end; aspect-ratio: 3 / 2; }
+  .tile--wide { grid-column: 1 / -1; }
+  .tile--wide .tile__media { aspect-ratio: 21 / 8; }
+  .tile--white { background: var(--bg); }
+  .tile--ink { background: var(--ink); color: var(--white); align-content: center; grid-template-rows: auto; padding-block: clamp(2.5rem, 5vw, 4rem); }
+  .tile--ink .t-h3 { color: var(--white); }
+  .tile--ink .label { color: rgb(255 255 255 / 0.7); }
+  .tile--ink .t-small { color: rgb(255 255 255 / 0.72); max-width: 24rem; }
+  .link--light { color: var(--white); }
+  .tile__line { position: absolute; left: 50%; bottom: 0; width: 64px; height: 3px; background: var(--accent); transform: translateX(-50%); border-radius: 3px 3px 0 0; }
+  @media (hover: hover) {
+    a.tile:hover { transform: translateY(-3px); }
+    a.tile:hover .link { background-size: 100% 2px; }
+    a.tile:hover .link svg { transform: translateX(2px); }
+  }
+
+  .row-link {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.25rem;
+    padding: 1.25rem 1.5rem; border-radius: var(--radius-m); background: var(--surface);
+    transition: background-color var(--dur) var(--ease-out);
+  }
+  .row-link > span:first-child { display: grid; gap: 0.1rem; text-align: left; }
+  .row-link strong { font-weight: 600; font-size: 1.0625rem; letter-spacing: -0.01em; }
+  .row-link__meta { justify-self: end; }
+  .row-link :global(svg) { width: 1rem; height: 1rem; color: var(--text-2); transition: transform var(--dur) var(--ease-out); }
+  @media (hover: hover) { .row-link:hover { background: var(--surface-2); } .row-link:hover :global(svg) { transform: translateX(2px); } }
+  @media (max-width: 767px) {
+    .tiles { grid-template-columns: 1fr; }
+    .tile--wide .tile__media { aspect-ratio: 4 / 3; }
+    .row-link__meta { display: none; }
+    .row-link { grid-template-columns: 1fr auto; }
+  }
+
+  /* Instalaciones */
+  .inst__hero { aspect-ratio: 16 / 7; border-radius: var(--radius-l); margin-bottom: 1rem; }
+  .inst__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1rem; }
+  .inst__links { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.6rem 1rem; margin-top: 0.4rem; }
+  @media (max-width: 899px) { .inst__grid { grid-template-columns: 1fr; } .inst__hero { aspect-ratio: 4 / 3; } }
+
+  /* Marcas */
+  .marcas { display: grid; gap: 2.5rem; padding-block: clamp(3.5rem, 6vw, 5.5rem); }
+  .marcas__list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: clamp(1.75rem, 5vw, 4rem); }
+  /* los logos son blancos: se invierten a gris oscuro sobre fondo blanco */
+  .marcas__list img { width: auto; height: var(--h); filter: invert(1); opacity: 0.55; transition: opacity var(--dur) var(--ease-out); }
+  .marcas__list li:hover img { opacity: 0.9; }
+</style>

@@ -125,10 +125,12 @@ Cada fase termina con una **URL de preview** para revisarla en el celular y apro
 
 ## 8. Decisiones tomadas (30-09-2026)
 
-1. **Sitio oscuro.** El amarillo `#FFEC00` se mantiene igual, pero **solo para acentos**.
+1. ~~Sitio oscuro~~ → **Actualizado el 30-09: fondo blanco** (más premium, más Apple). El amarillo `#FFEC00` se usa **solo como acento** (puntos, indicadores, subrayados, halos), nunca como color de texto.
 2. **Tipografía A (Apple puro).** Se usa *Geist* (display y texto) con *Geist Mono* para etiquetas y cifras.
-3. **Upscale con IA aprobado.** Real-ESRGAN ×4 → `assets/fotos-hd/`.
+3. ~~Upscale con IA~~ → **Actualizado el 30-09: solo fotos originales de Argomedo**, sin retoque ni IA, aunque el resultado sea más simple. Para respetar la resolución, las fotos van en tiles con bordes redondeados en lugar de ocupar toda la pantalla.
 4. **Marcas del hero:** Porsche, BMW, Hummer, Shelby, Corvette y Mercedes-Benz.
 5. **Copy:** se puede pulir todo lo necesario, con foco en el SEO.
 6. **WhatsApp flotante y botones de Waze/Maps:** se agregan.
 7. **Stack:** Astro estático con preview en Vercel/Netlify.
+8. **Textos más chicos y centrados** (escala tipo apple.com: titulares de 36–60 px y texto de 17 px).
+9. **No más páginas de “sistema”:** se trabaja directamente sobre las páginas reales del sitio.

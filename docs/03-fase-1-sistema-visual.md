@@ -1,3 +1,5 @@
+> **Actualización 30-09:** se reemplazó por la Home real, con fondo blanco y solo fotos originales. La página `/sistema` y las fotos con IA se eliminaron.
+
 # Fase 1: sistema visual
 
 Preview: `/sistema` (la raíz `/` redirige ahí mientras no exista la Home definitiva).

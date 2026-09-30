@@ -3,131 +3,119 @@ import { Picture } from 'astro:assets';
 import Icon from './Icon.astro';
 import { brands } from '../data/site';
 
-import showroom from '../../assets/fotos-hd/tema/home.jpg';
-import maserati from '../../assets/fotos-hd/biblioteca/2013-08/20130829_172246.jpg';
-import lambo from '../../assets/fotos-hd/biblioteca/2013-08/la-foto-4.jpg';
-import maseratiRear from '../../assets/fotos-hd/biblioteca/2013-08/20130829_172426.jpg';
+// Solo fotos originales de Argomedo (sin retoque ni IA)
+import maserati from '../../assets/fotos-originales/biblioteca/2013-08/20130829_172246.jpg';
+import showroom from '../../assets/fotos-originales/tema/home.jpg';
+import lambo from '../../assets/fotos-originales/biblioteca/2013-08/la-foto-4.jpg';
+import maseratiRear from '../../assets/fotos-originales/biblioteca/2013-08/20130829_172426.jpg';
 
-// Autos del showroom: se reemplazan por fotos del inventario actual cuando Argomedo las envíe
 const slides = [
-  { src: showroom, alt: 'Showroom de Argomedo Performance con Lamborghini Gallardo, Corvette, Honda NSX y Shelby GT500', caption: 'Showroom · Recoleta', pos: '50% 60%' },
   { src: maserati, alt: 'Maserati GranTurismo MC Stradale blanco en el showroom de Argomedo Performance', caption: 'Maserati GranTurismo MC Stradale', pos: '50% 55%' },
+  { src: showroom, alt: 'Showroom de Argomedo Performance con Lamborghini Gallardo, Corvette, Honda NSX y Shelby GT500', caption: 'Showroom · Recoleta', pos: '50% 60%' },
   { src: lambo, alt: 'Lamborghini Gallardo Spyder plateado, vista trasera', caption: 'Lamborghini Gallardo Spyder', pos: '50% 60%' },
   { src: maseratiRear, alt: 'Maserati GranTurismo MC Stradale, vista trasera', caption: 'Maserati GranTurismo MC', pos: '50% 62%' },
 ];
 ---
-<section class="hero" data-hero aria-label="Presentación">
-  <div class="hero__media" aria-hidden="false">
-    {slides.map((s, i) => (
-      <figure class:list={['hero__slide', { 'is-active': i === 0 }]} data-slide data-caption={s.caption}>
-        <Picture
-          src={s.src}
-          alt={s.alt}
-          widths={[828, 1280, 1920, 2560]}
-          sizes="100vw"
-          formats={['avif', 'webp']}
-          loading={i === 0 ? 'eager' : 'lazy'}
-          fetchpriority={i === 0 ? 'high' : 'auto'}
-          class="graded"
-          style={`object-position:${s.pos}`}
-        />
-      </figure>
-    ))}
-    <div class="hero__scrim"></div>
-  </div>
-
-  <div class="hero__content container">
-    <p class="label hero__kicker"><span class="dot"></span>Recoleta · Santiago · Desde 1970</p>
-    <h1 class="t-display hero__title">
-      Mecánica de alto rendimiento<span class="t-soft">, desde 1970.</span>
-    </h1>
-    <p class="t-lead hero__lead">
-      Taller familiar especializado en autos de lujo, deportivos y clásicos. Mecánica, repuestos importados y restauración con garantía profesional.
-    </p>
-    <div class="hero__ctas">
-      <a class="btn btn--primary" href="/showroom/autos-en-venta/">Ver showroom <Icon name="arrow" /></a>
-      <a class="btn btn--glass" href="/contacto/">Contáctenos</a>
-    </div>
-  </div>
-
-  <div class="hero__foot container">
-    <ul class="hero__brands" aria-label="Marcas con las que trabajamos">
-      {brands.map((b) => (
-        <li><img src={b.src} alt={b.name} style={`--h:${b.h}px`} loading="eager" /></li>
+<section class="hero container" data-hero aria-label="Presentación">
+  <div class="hero__tile">
+    <div class="hero__media">
+      {slides.map((s, i) => (
+        <figure class:list={['hero__slide', { 'is-active': i === 0 }]} data-slide data-caption={s.caption}>
+          <Picture
+            src={s.src}
+            alt={s.alt}
+            widths={[640, 960, 1440, 1920]}
+            sizes="(max-width: 1280px) 100vw, 1280px"
+            formats={['avif', 'webp']}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : 'auto'}
+            style={`object-position:${s.pos}`}
+          />
+        </figure>
       ))}
-    </ul>
-    <div class="hero__meta">
-      <p class="label num" aria-live="polite"><span data-slide-index>01</span> / {String(slides.length).padStart(2, '0')} · <span data-slide-caption>{slides[0].caption}</span></p>
+      <div class="hero__scrim"></div>
+    </div>
+
+    <div class="hero__content">
+      <p class="label hero__kicker"><span class="dot"></span>Recoleta · Santiago · Desde 1970</p>
+      <h1 class="t-hero hero__title">Mecánica de alto rendimiento para autos de lujo.</h1>
+      <p class="hero__lead">Taller familiar especializado en autos deportivos y clásicos, con garantía profesional.</p>
+      <div class="hero__ctas">
+        <a class="btn btn--light" href="/showroom/autos-en-venta/">Ver showroom</a>
+        <a class="btn btn--glass" href="/contacto/">Contáctenos <Icon name="arrow" /></a>
+      </div>
+    </div>
+
+    <div class="hero__foot">
+      <ul class="hero__brands" aria-label="Marcas con las que trabajamos">
+        {brands.map((b) => (
+          <li><img src={b.src} alt={b.name} style={`--h:${b.h}px`} /></li>
+        ))}
+      </ul>
       <div class="hero__bars" aria-hidden="true">
         {slides.map((_, i) => <i class:list={{ 'is-active': i === 0 }}><b></b></i>)}
       </div>
+      <p class="sr-only" aria-live="polite" data-slide-caption>{slides[0].caption}</p>
     </div>
   </div>
 </section>
 
 <style>
-  .hero {
-    position: relative; isolation: isolate;
-    min-height: 100svh; min-height: 100dvh;
+  .hero { padding-top: calc(var(--nav-h) + 0.75rem); }
+  .hero__tile {
+    position: relative; isolation: isolate; overflow: hidden;
+    border-radius: var(--radius-l);
+    min-height: min(82svh, 780px);
     display: grid; grid-template-rows: 1fr auto;
-    padding-top: calc(var(--nav-h) + 2rem);
-    overflow: hidden;
+    color: var(--on-photo); background: var(--ink);
   }
-  .hero__media { position: absolute; inset: 0; z-index: -1; background: var(--bg); }
-  .hero__slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.6s var(--ease-in-out); }
+  .hero__media { position: absolute; inset: 0; z-index: -1; }
+  .hero__slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.4s var(--ease-in-out); }
   .hero__slide.is-active { opacity: 1; }
   .hero__slide :global(picture), .hero__slide :global(img) { width: 100%; height: 100%; object-fit: cover; }
-  /* Ken Burns lento: solo transform, en el compositor */
-  .hero__slide :global(img) { transform: scale(1.06); transition: transform 9s linear; will-change: transform; }
+  .hero__slide :global(img) { transform: scale(1.04); transition: transform 8s linear; }
   .hero__slide.is-active :global(img) { transform: scale(1); }
   .hero__scrim {
     position: absolute; inset: 0;
     background:
-      linear-gradient(180deg, rgb(10 10 11 / 0.55) 0%, rgb(10 10 11 / 0) 22%),
-      linear-gradient(90deg, rgb(10 10 11 / 0.9) 0%, rgb(10 10 11 / 0.62) 38%, rgb(10 10 11 / 0.1) 68%),
-      linear-gradient(180deg, rgb(10 10 11 / 0) 50%, rgb(10 10 11 / 0.9) 100%);
+      radial-gradient(90% 60% at 50% 38%, rgb(0 0 0 / 0.42) 0%, rgb(0 0 0 / 0.12) 70%, rgb(0 0 0 / 0) 100%),
+      linear-gradient(180deg, rgb(0 0 0 / 0.25) 0%, rgb(0 0 0 / 0) 30%, rgb(0 0 0 / 0) 60%, rgb(0 0 0 / 0.55) 100%);
   }
 
-  .hero__content { align-self: center; padding-block: 3rem; }
-  .hero__kicker { margin-bottom: 1.75rem; color: var(--text); }
-  .hero__title { max-width: 11ch; font-size: clamp(3rem, 1.4rem + 5.4vw, 6.75rem); text-shadow: 0 2px 30px rgb(0 0 0 / 0.25); }
-  .hero__title .t-soft { color: rgb(245 245 247 / 0.5); }
-  .hero__lead { max-width: 34rem; margin-top: 1.75rem; color: rgb(245 245 247 / 0.78); }
-  .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2.5rem; }
-
-  .hero__foot {
-    display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem;
-    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  .hero__content {
+    align-self: center; justify-self: center; text-align: center;
+    max-width: 44rem; padding: 4rem 1.5rem 2rem;
+    display: grid; justify-items: center; gap: 1rem;
   }
-  .hero__brands { list-style: none; padding: 0; display: flex; align-items: center; gap: clamp(1.5rem, 3vw, 3rem); flex-wrap: wrap; }
-  .hero__brands img { width: auto; height: var(--h); opacity: 0.72; transition: opacity var(--dur) var(--ease-out); }
-  .hero__brands li:hover img { opacity: 1; }
-  .hero__meta { display: grid; gap: 0.75rem; justify-items: end; flex: none; }
+  .hero__kicker { color: rgb(255 255 255 / 0.9); }
+  .hero__title { color: var(--on-photo); text-shadow: 0 1px 24px rgb(0 0 0 / 0.25); }
+  .hero__lead { font-size: var(--fs-lead); color: rgb(255 255 255 / 0.86); max-width: 32rem; text-wrap: balance; }
+  .hero__ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 0.75rem; }
+
+  .hero__foot { display: grid; justify-items: center; gap: 1.1rem; padding: 0 1.5rem max(1.5rem, env(safe-area-inset-bottom)); }
+  .hero__brands { list-style: none; padding: 0; display: flex; align-items: center; justify-content: center; gap: clamp(1.25rem, 3vw, 2.5rem); flex-wrap: wrap; }
+  .hero__brands img { width: auto; height: calc(var(--h) * 0.85); opacity: 0.85; }
   .hero__bars { display: flex; gap: 6px; }
-  .hero__bars i { width: 28px; height: 2px; background: rgb(255 255 255 / 0.2); border-radius: 2px; overflow: hidden; }
-  .hero__bars b { display: block; height: 100%; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
-  .hero__bars i.is-active b { animation: bar var(--slide-ms, 7000ms) linear forwards; }
+  .hero__bars i { width: 22px; height: 2px; background: rgb(255 255 255 / 0.3); border-radius: 2px; overflow: hidden; }
+  .hero__bars b { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+  .hero__bars i.is-active b { animation: bar 7000ms linear forwards; }
   @keyframes bar { to { transform: scaleX(1); } }
 
-  /* Carga inicial orquestada */
-  .hero__kicker, .hero__title, .hero__lead, .hero__ctas, .hero__foot { animation: rise 1.1s var(--ease-out) both; }
-  .hero__title { animation-delay: 120ms; }
-  .hero__lead { animation-delay: 240ms; }
-  .hero__ctas { animation-delay: 360ms; }
-  .hero__foot { animation-delay: 600ms; }
-  @keyframes rise { from { opacity: 0; transform: translateY(28px); } }
+  .hero__content > *, .hero__foot { animation: rise 1s var(--ease-out) both; }
+  .hero__content > :nth-child(2) { animation-delay: 90ms; }
+  .hero__content > :nth-child(3) { animation-delay: 180ms; }
+  .hero__content > :nth-child(4) { animation-delay: 270ms; }
+  .hero__foot { animation-delay: 420ms; }
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
 
   @media (max-width: 767px) {
-    .hero__scrim { background: linear-gradient(180deg, rgb(10 10 11 / 0.6) 0%, rgb(10 10 11 / 0.15) 30%, rgb(10 10 11 / 0.55) 60%, rgb(10 10 11 / 0.95) 100%); }
-    .hero__content { align-self: end; padding-block: 2rem 1.5rem; }
-    .hero__foot { flex-direction: column; align-items: stretch; gap: 1.5rem; }
-    .hero__brands { flex-wrap: nowrap; gap: 0.75rem; justify-content: space-between; }
-    .hero__brands img { height: calc(var(--h) * 0.7); }
-    .hero__meta { justify-items: start; }
+    .hero { padding-inline: 0.5rem; }
+    .hero__tile { min-height: calc(100svh - var(--nav-h) - 1.25rem); border-radius: var(--radius-m); }
+    .hero__content { align-self: end; padding-bottom: 1rem; }
+    .hero__brands { flex-wrap: nowrap; gap: 0.9rem; }
+    .hero__brands img { height: calc(var(--h) * 0.62); }
   }
-  @media (prefers-reduced-motion: reduce) {
-    .hero__slide :global(img) { transform: none; transition: none; }
-  }
+  @media (prefers-reduced-motion: reduce) { .hero__slide :global(img) { transform: none; transition: none; } }
 </style>
 
 <script>
@@ -135,27 +123,20 @@ const slides = [
   if (hero) {
     const slides = [...hero.querySelectorAll<HTMLElement>('[data-slide]')];
     const bars = [...hero.querySelectorAll<HTMLElement>('.hero__bars i')];
-    const idx = hero.querySelector('[data-slide-index]')!;
     const cap = hero.querySelector('[data-slide-caption]')!;
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const MS = 7000;
     let i = 0;
     let timer: number | undefined;
-
     const show = (n: number) => {
       slides[i].classList.remove('is-active'); bars[i].classList.remove('is-active');
       i = (n + slides.length) % slides.length;
-      // la foto siguiente se carga justo antes de mostrarse
       slides[i].querySelector('img')?.setAttribute('loading', 'eager');
       slides[i].classList.add('is-active'); bars[i].classList.add('is-active');
-      idx.textContent = String(i + 1).padStart(2, '0');
       cap.textContent = slides[i].dataset.caption ?? '';
     };
     const stop = () => window.clearInterval(timer);
-    const start = () => { stop(); if (!reduce) timer = window.setInterval(() => show(i + 1), MS); };
-    // precarga la segunda imagen tras la carga inicial
+    const start = () => { stop(); if (!reduce) timer = window.setInterval(() => show(i + 1), 7000); };
     window.addEventListener('load', () => slides[1]?.querySelector('img')?.setAttribute('loading', 'eager'));
-    // pausa cuando el hero no está a la vista o la pestaña está oculta
     new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop())).observe(hero);
     document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
   }

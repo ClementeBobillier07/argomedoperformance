@@ -1,80 +1,76 @@
 /* ------------------------------------------------------------------
    Argomedo Performance: tokens de diseño
-   "Showroom de noche": sitio oscuro y fotográfico. El amarillo de marca
-   (#FFEC00) se usa SOLO como acento (≈2 % de la pantalla).
+   Fondo blanco, lenguaje Apple: grises neutros, texto contenido y
+   centrado. El amarillo de marca (#FFEC00) se usa SOLO como acento
+   (puntos, indicadores, subrayados, halos). Nunca como color de texto
+   sobre blanco, porque no tiene contraste.
 ------------------------------------------------------------------- */
 :root {
   /* Color: primitivos */
-  --ink-950: #0a0a0b;
-  --ink-900: #111113;
-  --ink-850: #141416;
-  --ink-800: #1c1c1f;
-  --ink-700: #2a2a2e;
+  --white: #ffffff;
+  --grey-50: #f5f5f7;
+  --grey-100: #ebebef;
+  --grey-300: #d2d2d7;
   --grey-500: #86868b;
-  --grey-400: #a1a1a6;
-  --grey-100: #f5f5f7;
+  --grey-600: #6e6e73;
+  --ink: #1d1d1f;
+  --black: #000000;
   --yellow: #ffec00;
 
   /* Color: semánticos */
-  --bg: var(--ink-950);
-  --surface: var(--ink-850);
-  --surface-2: var(--ink-800);
-  --text: var(--grey-100);
-  --text-2: var(--grey-400);
+  --bg: var(--white);
+  --surface: var(--grey-50);
+  --surface-2: var(--grey-100);
+  --text: var(--ink);
+  --text-2: var(--grey-600);
   --text-3: var(--grey-500);
-  --hairline: rgb(255 255 255 / 0.08);
-  --hairline-strong: rgb(255 255 255 / 0.16);
+  --hairline: rgb(0 0 0 / 0.08);
+  --hairline-strong: rgb(0 0 0 / 0.16);
   --accent: var(--yellow);
-  --accent-ink: #0a0a0b; /* texto sobre amarillo */
+  --on-photo: var(--white);
 
   /* Materiales (Apple): capas translúcidas */
-  --glass: rgb(16 16 18 / 0.62);
-  --glass-light: rgb(255 255 255 / 0.08);
-  --glass-blur: blur(20px) saturate(160%);
-
-  /* Degradados para texto sobre foto */
-  --scrim-bottom: linear-gradient(180deg, rgb(10 10 11 / 0) 35%, rgb(10 10 11 / 0.55) 65%, rgb(10 10 11 / 0.92) 100%);
-  --scrim-left: linear-gradient(90deg, rgb(10 10 11 / 0.88) 0%, rgb(10 10 11 / 0.55) 40%, rgb(10 10 11 / 0) 75%);
-  --scrim-top: linear-gradient(180deg, rgb(10 10 11 / 0.7) 0%, rgb(10 10 11 / 0) 100%);
+  --glass: rgb(255 255 255 / 0.72);
+  --glass-dark: rgb(0 0 0 / 0.28);
+  --glass-blur: blur(20px) saturate(180%);
 
   /* Tipografía */
   --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  /* Escala fluida: el tracking se ajusta por tamaño, nunca es fijo */
-  --fs-display: clamp(3rem, 1.6rem + 6.2vw, 8rem);
-  --fs-h1: clamp(2.5rem, 1.6rem + 4vw, 5.5rem);
-  --fs-h2: clamp(2rem, 1.4rem + 2.6vw, 4rem);
-  --fs-h3: clamp(1.375rem, 1.15rem + 0.9vw, 1.875rem);
-  --fs-lead: clamp(1.125rem, 1.02rem + 0.45vw, 1.375rem);
+  /* Escala contenida (tipo apple.com): titulares medianos, texto 17 px */
+  --fs-hero: clamp(2.25rem, 1.6rem + 2.6vw, 3.75rem);
+  --fs-h2: clamp(1.875rem, 1.45rem + 1.7vw, 3rem);
+  --fs-h3: clamp(1.375rem, 1.2rem + 0.7vw, 1.875rem);
+  --fs-h4: 1.1875rem;
+  --fs-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
   --fs-body: 1.0625rem;
   --fs-small: 0.875rem;
   --fs-label: 0.75rem;
 
-  --ls-display: -0.045em;
-  --ls-h1: -0.04em;
-  --ls-h2: -0.032em;
+  --ls-hero: -0.035em;
+  --ls-h2: -0.028em;
   --ls-h3: -0.02em;
-  --ls-label: 0.14em;
+  --ls-label: 0.12em;
 
   /* Espaciado */
-  --gutter: clamp(1rem, 0.5rem + 2.5vw, 3rem);
-  --max: 1440px;
-  --max-text: 38rem;
-  --section: clamp(5rem, 3rem + 8vw, 11rem);
+  --gutter: clamp(1rem, 0.4rem + 2.4vw, 2.75rem);
+  --max: 1280px;
+  --max-text: 40rem;
+  --section: clamp(4.5rem, 3rem + 6vw, 8.5rem);
 
   /* Forma */
-  --radius-s: 10px;
-  --radius-m: 18px;
+  --radius-s: 12px;
+  --radius-m: 20px;
   --radius-l: 28px;
   --radius-pill: 999px;
 
-  /* Movimiento (críticamente amortiguado por defecto, sin rebote) */
+  /* Movimiento (sin rebote) */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --dur-fast: 160ms;
   --dur: 420ms;
   --dur-slow: 900ms;
 
-  --nav-h: 72px;
+  --nav-h: 60px;
 }

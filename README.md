@@ -10,7 +10,6 @@ Rediseño de UI/UX de [argomedoperformance.cl](https://argomedoperformance.cl/),
 
 ## Assets
 - `assets/fotos-originales/`: todas las fotos del sitio en su resolución original, con inventario
-- `assets/fotos-hd/`: fotos mejoradas con IA (Real-ESRGAN ×4, máx. 2560 px) que usa el sitio
 - `assets/prensa/`: PDFs de los reportajes de prensa
 - `public/brand/`, `public/marcas/`: escudo Argomedo y logos de marcas en blanco
 
@@ -25,8 +24,8 @@ npm run build    # genera dist/
 
 - `src/styles/tokens.css`: tokens de diseño (color, tipografía, espaciado, movimiento)
 - `src/data/site.ts`: datos del negocio (teléfono, dirección, menú, marcas)
-- `src/components/`: Nav, Hero, CarCard, PhotoSection, Footer, WhatsAppButton
-- `src/pages/sistema.astro`: style tile de la Fase 1 (`/sistema`)
+- `src/components/`: Nav, Hero, Footer, WhatsAppButton, Icon
+- `src/pages/index.astro`: Home
 
 ## Preview
 Conecta el repo a Vercel (detecta Astro solo). Cada push a una rama genera una URL de preview.
