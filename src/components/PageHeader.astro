@@ -1,0 +1,21 @@
+---
+// Encabezado de página interna: subnav (si la sección la tiene) + título centrado
+import SubNav from './SubNav.astro';
+interface Props { label?: string; title: string; soft?: string; lead?: string; section?: 'argomedo' | 'showroom' | 'contacto' }
+const { label, title, soft, lead, section } = Astro.props;
+---
+<header class="ph">
+  {section && <SubNav section={section} />}
+  <div class="container ph__inner center">
+    {label && <p class="label"><span class="dot"></span>{label}</p>}
+    <h1 class="t-hero">{title}{soft && <><br /><span class="t-soft">{soft}</span></>}</h1>
+    {lead && <p class="t-lead">{lead}</p>}
+    <slot />
+  </div>
+</header>
+
+<style>
+  .ph { padding-top: var(--nav-h); }
+  .ph__inner { display: grid; justify-items: center; gap: 1rem; max-width: 46rem; padding-block: clamp(3rem, 6vw, 5rem) clamp(2.5rem, 5vw, 3.5rem); }
+  .ph__inner .t-lead { max-width: 36rem; }
+</style>

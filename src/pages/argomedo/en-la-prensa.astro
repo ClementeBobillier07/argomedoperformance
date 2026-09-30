@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Icon from '../../components/Icon.astro';
+import { prensa } from '../../data/content';
+---
+<Base
+  title="Argomedo en la prensa"
+  description="Argomedo Performance en El Mercurio, Las Últimas Noticias y La Segunda: reportajes sobre el taller de autos de lujo de Recoleta."
+>
+  <PageHeader section="argomedo" label="En la prensa" title="El reflejo de" soft="nuestro trabajo." lead="El prestigio de nuestro trabajo no solo lo agradecen nuestros clientes. Estas son algunas de nuestras apariciones en medios de comunicación." />
+
+  <section class="container press-wrap">
+    <ul class="press">
+      {prensa.map((p, i) => (
+        <li data-reveal style={`--d:${i * 70}ms`}>
+          <a class="press__card" href={p.pdf} target="_blank" rel="noopener">
+            <p class="label">{p.medio}</p>
+            <blockquote class="t-h4">{p.titulo}</blockquote>
+            <span class="press__foot"><span class="link">Leer artículo <Icon name="arrow" /></span><span class="t-small num">PDF · {p.peso}</span></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .press-wrap { padding-bottom: var(--section); }
+  .press { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .press__card { height: 100%; display: grid; grid-template-rows: auto 1fr auto; gap: 1.25rem; padding: clamp(1.5rem, 3vw, 2.25rem); border-radius: var(--radius-l); background: var(--surface); transition: transform var(--dur) var(--ease-out), background-color var(--dur); }
+  .press__card blockquote { font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem); line-height: 1.25; }
+  .press__foot { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--hairline); }
+  @media (hover: hover) { .press__card:hover { transform: translateY(-3px); background: var(--surface-2); } .press__card:hover .link { background-size: 100% 2px; } }
+  @media (max-width: 899px) { .press { grid-template-columns: 1fr; } }
+</style>

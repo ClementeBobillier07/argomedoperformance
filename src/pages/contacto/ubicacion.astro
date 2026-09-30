@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../data/site';
+import fachada from '../../../assets/fotos-originales/tema/showroom.jpg';
+
+const q = encodeURIComponent(`${site.address.street}, ${site.address.locality}, Santiago, Chile`);
+---
+<Base
+  title="Ubicación: cómo llegar"
+  description={`Estamos en ${site.address.street}, ${site.address.locality}, Santiago. Abre la ruta en Google Maps o Waze.`}
+>
+  <PageHeader section="contacto" label="Ubicación" title={site.address.street} soft={`${site.address.locality}, Santiago.`} lead="Nuestras oficinas, taller mecánico y taller de fabricación de partes y piezas están aquí desde 1970.">
+    <div class="actions">
+      <a class="btn btn--primary" href={site.mapsUrl} target="_blank" rel="noopener"><Icon name="maps" /> Abrir en Google Maps</a>
+      <a class="btn btn--secondary" href={site.wazeUrl} target="_blank" rel="noopener"><Icon name="waze" /> Abrir en Waze</a>
+    </div>
+  </PageHeader>
+
+  <section class="container place">
+    <div class="map">
+      <iframe title={`Mapa: ${site.address.street}, ${site.address.locality}`} src={`https://www.google.com/maps?q=${q}&z=16&output=embed`} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="info">
+      <div class="photo info__photo"><Image src={fachada} alt="Showroom de Argomedo Performance" width={960} loading="lazy" /></div>
+      <dl class="info__list">
+        <div><dt class="label">Dirección</dt><dd>{site.address.street}, {site.address.locality}, {site.address.city}</dd></div>
+        <div><dt class="label">Teléfono</dt><dd><a href={site.phoneHref}>{site.phone}</a></dd></div>
+        <div><dt class="label">Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+      </dl>
+      <a class="link" href="/contacto/?motivo=reunion">Agendar una visita <Icon name="arrow" /></a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 0.75rem; }
+  .place { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1rem; padding-bottom: var(--section); }
+  .map { border-radius: var(--radius-l); overflow: hidden; background: var(--surface); min-height: 460px; }
+  .map iframe { width: 100%; height: 100%; min-height: 460px; border: 0; display: block; filter: grayscale(0.25); }
+  .info { display: grid; align-content: start; gap: 1.25rem; padding: 0.75rem 0.75rem 1.5rem; border-radius: var(--radius-l); background: var(--surface); }
+  .info__photo { aspect-ratio: 16 / 9; border-radius: calc(var(--radius-l) - 8px); }
+  .info__list { display: grid; gap: 1rem; padding-inline: 0.75rem; }
+  .info__list div { display: grid; gap: 0.25rem; }
+  .info__list dd a:hover { text-decoration: underline; }
+  .info > .link { margin-inline: 0.75rem; justify-self: start; }
+  @media (max-width: 899px) { .place { grid-template-columns: 1fr; } .map, .map iframe { min-height: 340px; } }
+</style>

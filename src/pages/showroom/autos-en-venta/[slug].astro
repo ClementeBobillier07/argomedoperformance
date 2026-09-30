@@ -1,0 +1,86 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../../../layouts/Base.astro';
+import SubNav from '../../../components/SubNav.astro';
+import Lightbox from '../../../components/Lightbox.astro';
+import Icon from '../../../components/Icon.astro';
+import { cars, carName, type Car } from '../../../data/content';
+import { waLink } from '../../../data/site';
+
+export function getStaticPaths() {
+  return cars.map((car) => ({ params: { slug: car.slug }, props: { car } }));
+}
+const { car } = Astro.props as { car: Car };
+const name = carName(car);
+const photos = await Promise.all(car.photos.map(async (p) => ({ ...p, full: (await getImage({ src: p.src, format: 'webp' })).src })));
+const consulta = `/contacto/?motivo=cotizacion&auto=${encodeURIComponent(name)}`;
+const schema = {
+  '@context': 'https://schema.org', '@type': 'Car', name: `${name} ${car.year}`, brand: { '@type': 'Brand', name: car.brand },
+  model: car.model, vehicleModelDate: car.year, color: car.color, description: car.description,
+  image: photos.map((p) => new URL(p.full, Astro.site).href),
+  offers: { '@type': 'Offer', availability: 'https://schema.org/InStock', seller: { '@type': 'AutoDealer', name: 'Argomedo Performance' } },
+};
+const specs = [
+  ['Marca', car.brand], ['Modelo', car.model], ['Año', car.year], ['Color', car.color], ['Kilometraje', car.mileage], ['Precio', car.price],
+];
+---
+<Base title={`${name} ${car.year} en venta`} description={car.description}>
+  <div class="top"><SubNav section="showroom" /></div>
+
+  <section class="container car">
+    <nav class="crumbs t-small" aria-label="Ruta">
+      <a href="/showroom/autos-en-venta/">Autos en venta</a> <span aria-hidden="true">/</span> <span aria-current="page">{car.brand} {car.model}</span>
+    </nav>
+
+    <div class="car__grid">
+      <div class="car__gallery">
+        <a class="photo car__main" href={photos[0].full} data-lightbox="auto" data-caption={photos[0].alt}>
+          <Image src={photos[0].src} alt={photos[0].alt} width={photos[0].src.width} sizes="(max-width: 899px) 100vw, 720px" loading="eager" fetchpriority="high" />
+          <span class="car__zoom label">Ver fotos · <span class="num">{photos.length}</span></span>
+        </a>
+        <div class="car__thumbs">
+          {photos.slice(1).map((p) => (
+            <a class="photo" href={p.full} data-lightbox="auto" data-caption={p.alt}><Image src={p.src} alt={p.alt} width={320} loading="lazy" /></a>
+          ))}
+        </div>
+      </div>
+
+      <aside class="car__panel">
+        <p class="label"><span class="dot"></span>{car.status}</p>
+        <h1 class="t-h2">{car.brand}<br /><span class="t-soft">{car.model}</span></h1>
+        <dl class="specs">
+          {specs.map(([k, v]) => <div><dt>{k}</dt><dd class:list={{ num: k === 'Año' || k === 'Kilometraje' }}>{v}</dd></div>)}
+        </dl>
+        <div class="car__ctas">
+          <a class="btn btn--primary" href={consulta}>Consultar por este auto</a>
+          <a class="btn btn--secondary" href={waLink(`Hola, me interesa el ${name} ${car.year} que tienen en venta.`)} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp</a>
+        </div>
+        <p class="t-small">Puedes verlo en nuestro showroom de Recoleta. <a class="link" href="/contacto/ubicacion/">Cómo llegar <Icon name="arrow" /></a></p>
+      </aside>
+    </div>
+  </section>
+
+  <Lightbox />
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</Base>
+
+<style>
+  .top { padding-top: var(--nav-h); }
+  .car { padding-block: 1.5rem var(--section); }
+  .crumbs { margin-bottom: 1.5rem; }
+  .crumbs a:hover { color: var(--text); }
+  .crumbs [aria-current] { color: var(--text); }
+  .car__grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+  .car__gallery { display: grid; gap: 0.6rem; }
+  .car__main { aspect-ratio: 4 / 3; border-radius: var(--radius-l); cursor: zoom-in; }
+  .car__zoom { position: absolute; right: 0.9rem; bottom: 0.9rem; padding: 0.4rem 0.75rem; border-radius: var(--radius-pill); background: var(--glass); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); color: var(--ink); font-size: 0.6875rem; }
+  .car__thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
+  .car__thumbs .photo { aspect-ratio: 4 / 3; border-radius: var(--radius-s); cursor: zoom-in; }
+  .car__panel { position: sticky; top: calc(var(--nav-h) + 4rem); display: grid; gap: 1.25rem; }
+  .specs { display: grid; border-top: 1px solid var(--hairline); }
+  .specs div { display: flex; justify-content: space-between; gap: 1rem; padding-block: 0.8rem; border-bottom: 1px solid var(--hairline); font-size: 0.9375rem; }
+  .specs dt { color: var(--text-2); }
+  .specs dd { font-weight: 500; text-align: right; }
+  .car__ctas { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  @media (max-width: 899px) { .car__grid { grid-template-columns: 1fr; } .car__panel { position: static; } }
+</style>

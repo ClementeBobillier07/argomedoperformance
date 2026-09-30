@@ -1,0 +1,129 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Icon from '../../components/Icon.astro';
+import { site, waLink } from '../../data/site';
+import { motivos } from '../../data/content';
+---
+<Base
+  title="Contáctenos"
+  description={`Cotiza mecánica, repuestos, pintura o importación para tu auto. Escríbenos o llámanos al ${site.phone}. Argomedo Performance, Recoleta, Santiago.`}
+>
+  <PageHeader section="contacto" label="Consultas" title="Te escuchamos." lead="Cuéntanos qué necesitas y te respondemos a la brevedad." />
+
+  <section class="container contact">
+    <!-- TODO(Fase 5): conectar a un servicio de formularios (p. ej. Formspree) para enviar sin abrir el correo -->
+    <form class="form" data-form novalidate>
+      <div class="field"><input id="f-nombre" name="nombre" autocomplete="name" placeholder=" " required /><label for="f-nombre">Nombre</label><p class="field__err" id="e-nombre">Escribe tu nombre.</p></div>
+      <div class="field"><input id="f-email" name="email" type="email" autocomplete="email" placeholder=" " required /><label for="f-email">Email</label><p class="field__err" id="e-email">Escribe un email válido, por ejemplo nombre@correo.cl.</p></div>
+      <div class="field"><input id="f-telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" placeholder=" " required /><label for="f-telefono">Teléfono</label><p class="field__err" id="e-telefono">Escribe un teléfono de contacto.</p></div>
+      <div class="field"><input id="f-comuna" name="comuna" autocomplete="address-level2" placeholder=" " /><label for="f-comuna">Comuna (opcional)</label></div>
+      <div class="field field--select field--full">
+        <select id="f-motivo" name="motivo" required>
+          <option value="" disabled selected hidden></option>
+          {motivos.map((m) => <option value={m.value}>{m.label}</option>)}
+        </select>
+        <label for="f-motivo">Razón del contacto</label>
+        <p class="field__err" id="e-motivo">Elige una razón.</p>
+      </div>
+      <div class="field field--full"><textarea id="f-mensaje" name="mensaje" rows="5" placeholder=" " required></textarea><label for="f-mensaje">Comentario</label><p class="field__err" id="e-mensaje">Cuéntanos brevemente qué necesitas.</p></div>
+      <div class="form__foot field--full">
+        <button class="btn btn--primary" type="submit">Enviar consulta <Icon name="arrow" /></button>
+        <p class="t-small">Se abrirá tu correo con el mensaje listo para enviar a {site.email}.</p>
+      </div>
+      <p class="form__ok field--full" role="status" data-form-ok hidden>Listo. Revisa tu app de correo para enviar el mensaje. Si prefieres, <a class="link" data-form-wa href={waLink()} target="_blank" rel="noopener">envíalo por WhatsApp</a>.</p>
+    </form>
+
+    <aside class="side">
+      <div class="side__card">
+        <p class="label">Teléfono</p>
+        <a class="side__big" href={site.phoneHref}>{site.phone}</a>
+      </div>
+      <div class="side__card">
+        <p class="label">Email</p>
+        <a class="side__big" href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+      <div class="side__card">
+        <p class="label">WhatsApp</p>
+        <a class="btn btn--secondary" href={waLink()} target="_blank" rel="noopener"><Icon name="whatsapp" /> Escríbenos</a>
+      </div>
+      <div class="side__card">
+        <p class="label">Dirección</p>
+        <p>{site.address.street}, {site.address.locality}, {site.address.city}</p>
+        <a class="link" href="/contacto/ubicacion/">Ver mapa <Icon name="arrow" /></a>
+      </div>
+    </aside>
+  </section>
+</Base>
+
+<style>
+  .contact { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1rem; padding-bottom: var(--section); align-items: start; }
+  .form { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; padding: clamp(1.25rem, 3vw, 2rem); border-radius: var(--radius-l); background: var(--surface); }
+  .field { position: relative; }
+  .field--full { grid-column: 1 / -1; }
+  .field input, .field select, .field textarea {
+    width: 100%; min-height: 58px; padding: 1.55rem 1rem 0.5rem;
+    border: 0; border-radius: var(--radius-s); background: var(--bg);
+    box-shadow: inset 0 0 0 1px var(--hairline-strong);
+    font-size: 1rem; /* 16 px: evita el zoom en iOS */
+    appearance: none; -webkit-appearance: none;
+    transition: box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .field textarea { resize: vertical; min-height: 140px; }
+  .field--select::after { content: ''; position: absolute; right: 1.1rem; top: 29px; width: 7px; height: 7px; border-right: 1.5px solid var(--text-2); border-bottom: 1.5px solid var(--text-2); transform: translateY(-60%) rotate(45deg); pointer-events: none; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; box-shadow: inset 0 0 0 2px var(--ink), 0 0 0 4px rgb(255 236 0 / 0.55); }
+  .field label { position: absolute; left: 1rem; top: 1.1rem; color: var(--text-3); pointer-events: none; transform-origin: left top; transition: transform var(--dur-fast) var(--ease-out), color var(--dur-fast); }
+  .field input:focus + label, .field input:not(:placeholder-shown) + label,
+  .field textarea:focus + label, .field textarea:not(:placeholder-shown) + label,
+  .field select:focus + label, .field select:valid + label { transform: translateY(-0.6rem) scale(0.75); color: var(--text-2); }
+  .field__err { display: none; margin-top: 0.35rem; font-size: 0.8125rem; color: #b3261e; }
+  .field.is-invalid input, .field.is-invalid select, .field.is-invalid textarea { box-shadow: inset 0 0 0 1.5px #b3261e; }
+  .field.is-invalid .field__err { display: block; }
+  .form__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+  .form__ok { padding: 1rem 1.25rem; border-radius: var(--radius-s); background: var(--bg); box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+  .side { display: grid; gap: 1rem; }
+  .side__card { display: grid; justify-items: start; gap: 0.5rem; padding: 1.5rem; border-radius: var(--radius-l); background: var(--surface); }
+  .side__big { font-size: 1.25rem; font-weight: 500; letter-spacing: -0.015em; word-break: break-word; }
+  @media (max-width: 899px) { .contact { grid-template-columns: 1fr; } }
+  @media (max-width: 599px) { .form { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  import { site, waLink, } from '../../data/site';
+  const form = document.querySelector<HTMLFormElement>('[data-form]');
+  if (form) {
+    const q = new URLSearchParams(location.search);
+    const motivo = form.elements.namedItem('motivo') as HTMLSelectElement;
+    const msg = form.elements.namedItem('mensaje') as HTMLTextAreaElement;
+    // Preselección desde servicios, autos o botones "Agendar visita"
+    if (q.get('motivo') && [...motivo.options].some((o) => o.value === q.get('motivo'))) motivo.value = q.get('motivo')!;
+    if (q.get('auto')) msg.value = `Hola, me interesa el ${q.get('auto')}. `;
+
+    const fields = [...form.querySelectorAll<HTMLElement>('.field')];
+    const check = (f: HTMLElement) => {
+      const el = f.querySelector<HTMLInputElement>('input, select, textarea');
+      if (!el) return true;
+      const ok = el.checkValidity() && (!el.required || el.value.trim() !== '');
+      f.classList.toggle('is-invalid', !ok);
+      if (!ok) el.setAttribute('aria-describedby', f.querySelector('.field__err')?.id ?? ''); else el.removeAttribute('aria-describedby');
+      el.setAttribute('aria-invalid', String(!ok));
+      return ok;
+    };
+    // Validación en línea al salir de cada campo
+    fields.forEach((f) => f.querySelector('input, select, textarea')?.addEventListener('blur', () => f.classList.contains('is-invalid') || (f.querySelector<HTMLInputElement>('input, select, textarea')!.value && check(f))));
+    fields.forEach((f) => f.querySelector('input, select, textarea')?.addEventListener('input', () => f.classList.contains('is-invalid') && check(f)));
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const bad = fields.filter((f) => !check(f));
+      if (bad.length) { bad[0].querySelector<HTMLElement>('input, select, textarea')?.focus(); return; }
+      const d = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      const label = motivo.selectedOptions[0]?.textContent ?? d.motivo;
+      const body = `${d.mensaje}\n\nNombre: ${d.nombre}\nEmail: ${d.email}\nTeléfono: ${d.telefono}${d.comuna ? `\nComuna: ${d.comuna}` : ''}`;
+      const subject = `Consulta web: ${label}`;
+      form.querySelector<HTMLAnchorElement>('[data-form-wa]')!.href = waLink(`${subject}\n\n${body}`);
+      form.querySelector<HTMLElement>('[data-form-ok]')!.hidden = false;
+      location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+  }
+</script>

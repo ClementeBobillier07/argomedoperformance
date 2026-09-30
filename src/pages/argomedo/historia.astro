@@ -1,0 +1,102 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../data/site';
+import { hitos } from '../../data/content';
+
+import premio from '../../../assets/fotos-originales/biblioteca/2011-09/premio_argomedo.jpg';
+import autos from '../../../assets/fotos-originales/biblioteca/2011-09/argomedo_automoviles.jpg';
+import banner from '../../../assets/fotos-originales/tema/argomedo.jpg';
+
+const hitosFull = await Promise.all(
+  hitos.map(async (h) => ({
+    ...h,
+    photos: await Promise.all(h.photos.map(async (p) => ({ ...p, full: (await getImage({ src: p.src, format: 'webp' })).src }))),
+  })),
+);
+---
+<Base
+  title="Historia: calidad, seguridad y profesionalismo"
+  description={`Argomedo Performance es una empresa familiar fundada en ${site.founded} por don ${site.founder}. Conoce los hitos del taller: Porsche 930, Shelby GT500, Corvette 1966 y más.`}
+>
+  <PageHeader section="argomedo" label={`Desde julio de ${site.founded}`} title="Calidad, seguridad" soft="y profesionalismo." />
+
+  <section class="container">
+    <div class="photo banner" data-reveal>
+      <Image src={banner} alt="Muro con el escudo de Argomedo Performance en el showroom" widths={[640, 960]} sizes="(max-width: 1280px) 100vw, 1200px" loading="eager" />
+    </div>
+  </section>
+
+  <section class="section container story">
+    <div class="story__text">
+      <p class="t-lead" data-reveal>Argomedo Performance es una empresa familiar fundada por don {site.founder} en julio de {site.founded}. Desde sus inicios se ha ganado el aprecio de los amantes de la mecánica y de quienes buscan altos estándares de calidad e ingeniería de punta.</p>
+      <p class="t-body" data-reveal>Desde el primer día, sus oficinas, taller mecánico y taller de fabricación de partes y piezas han estado en {site.address.street}, {site.address.locality}, Santiago.</p>
+      <p class="t-body" data-reveal>A lo largo de su trayectoria, Argomedo Performance ha preparado y modificado para alto rendimiento algunos de los automóviles deportivos más representativos de la historia automotriz, siempre fiel al espíritu y legado de su fundador.</p>
+    </div>
+    <div class="story__photos">
+      <div class="photo" data-reveal><Image src={premio} alt="Placa del premio a la trayectoria otorgado por INACAP a Luis Alfredo Argomedo" width={556} loading="lazy" /></div>
+      <div class="photo" data-reveal style="--d:80ms"><Image src={autos} alt="Autos deportivos en el showroom de Argomedo Performance" width={556} loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="hitos-t">
+    <div class="container">
+      <header class="head center">
+        <p class="label">Hitos</p>
+        <h2 id="hitos-t" class="t-h2">Autos que marcaron nuestra historia.</h2>
+      </header>
+      <ol class="timeline">
+        {hitosFull.map((h) => (
+          <li class="hito" data-reveal>
+            <p class="hito__year num">{h.year}</p>
+            <div class="hito__body">
+              <h3 class="t-h4">{h.title}</h3>
+              <p class="t-body">{h.text}</p>
+              <div class="hito__photos">
+                {h.photos.map((p) => (
+                  <a class="photo" href={p.full} data-lightbox={`hito-${h.year}`} data-caption={p.alt}>
+                    <Image src={p.src} alt={p.alt} width={320} loading="lazy" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section container center closing">
+    <p class="label">El legado de nuestro fundador</p>
+    <p class="t-hero">Garantía profesional.</p>
+    <a class="link" href="/argomedo/en-la-prensa/">Argomedo en la prensa <Icon name="arrow" /></a>
+  </section>
+
+  <Lightbox />
+</Base>
+
+<style>
+  .banner { aspect-ratio: 960 / 419; border-radius: var(--radius-l); }
+  .story { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .story__text { display: grid; gap: 1.25rem; }
+  .story__photos { display: grid; gap: 1rem; }
+  .story__photos .photo { aspect-ratio: 556 / 336; border-radius: var(--radius-m); }
+  @media (max-width: 899px) { .story { grid-template-columns: 1fr; } .banner { aspect-ratio: 4 / 3; } }
+
+  .timeline { list-style: none; padding: 0; max-width: 52rem; margin-inline: auto; display: grid; }
+  .hito { display: grid; grid-template-columns: 7rem 1fr; gap: 1.5rem; padding-block: 2rem; border-top: 1px solid var(--hairline); }
+  .hito:last-child { border-bottom: 1px solid var(--hairline); }
+  .hito__year { font-size: 1.75rem; font-weight: 500; line-height: 1.1; position: relative; padding-left: 1rem; }
+  .hito__year::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08); }
+  .hito__body { display: grid; gap: 0.75rem; }
+  .hito__photos { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
+  .hito__photos .photo { width: 160px; aspect-ratio: 4 / 3; border-radius: var(--radius-s); cursor: zoom-in; }
+  .hito__photos .photo img { transition: transform var(--dur) var(--ease-out); }
+  .hito__photos .photo:hover img { transform: scale(1.05); }
+  @media (max-width: 599px) { .hito { grid-template-columns: 1fr; gap: 0.75rem; } .hito__photos .photo { width: calc(50% - 0.3rem); } }
+
+  .closing { display: grid; justify-items: center; gap: 1rem; }
+</style>

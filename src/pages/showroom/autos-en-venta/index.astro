@@ -1,0 +1,61 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../../layouts/Base.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import Icon from '../../../components/Icon.astro';
+import { cars, carName } from '../../../data/content';
+import { waLink } from '../../../data/site';
+---
+<Base
+  title="Autos en venta"
+  description="Autos de lujo y deportivos en venta en el showroom de Argomedo Performance, Recoleta. Consulta disponibilidad y precio."
+>
+  <PageHeader section="showroom" label="Autos en venta" title="Automóviles para tu vida." soft="Tecnología y calidad." />
+
+  <section class="container grid-wrap">
+    <ul class="cars">
+      {cars.map((c) => (
+        <li data-reveal>
+          <a class="card" href={`/showroom/autos-en-venta/${c.slug}/`}>
+            <div class="card__media photo">
+              <Image src={c.photos[0].src} alt={c.photos[0].alt} width={c.photos[0].src.width} sizes="(max-width: 767px) 100vw, 600px" loading="eager" />
+              <span class="card__badge label"><span class="dot"></span>{c.status}</span>
+            </div>
+            <div class="card__body">
+              <p class="label">{c.brand} · <span class="num">{c.year}</span></p>
+              <h2 class="t-h4">{c.model}</h2>
+              <p class="t-small">{c.color} · <span class="num">{c.mileage}</span> · {c.price}</p>
+              <span class="link">Ver detalles <Icon name="arrow" /></span>
+            </div>
+          </a>
+        </li>
+      ))}
+      <li data-reveal style="--d:80ms">
+        <div class="card card--ask">
+          <p class="label">¿Buscas otro modelo?</p>
+          <h2 class="t-h4">Te ayudamos a encontrar e importar el auto que buscas.</h2>
+          <div class="ask__ctas">
+            <a class="btn btn--primary" href="/contacto/?motivo=importacion">Hacer una consulta</a>
+            <a class="btn btn--secondary" href={waLink('Hola, busco un auto en particular. ¿Me pueden ayudar?')} target="_blank" rel="noopener"><Icon name="whatsapp" /> WhatsApp</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <p class="t-small center note">{cars.length} {cars.length === 1 ? 'auto disponible' : 'autos disponibles'}. Visítanos para conocer el inventario completo.</p>
+  </section>
+</Base>
+
+<style>
+  .grid-wrap { padding-bottom: var(--section); }
+  .cars { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .card { display: grid; gap: 1.25rem; height: 100%; padding: 0.75rem 0.75rem 1.5rem; border-radius: var(--radius-l); background: var(--surface); transition: transform var(--dur) var(--ease-out); }
+  .card__media { aspect-ratio: 4 / 3; border-radius: calc(var(--radius-l) - 8px); }
+  .card__badge { position: absolute; top: 0.9rem; left: 0.9rem; padding: 0.35rem 0.7rem; border-radius: var(--radius-pill); background: var(--glass); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); color: var(--ink); font-size: 0.6875rem; }
+  .card__body { display: grid; gap: 0.4rem; justify-items: start; padding-inline: 0.75rem; }
+  .card__body .link { margin-top: 0.5rem; }
+  .card--ask { align-content: center; justify-items: center; text-align: center; padding: clamp(2rem, 4vw, 3rem); gap: 0.9rem; }
+  .ask__ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 0.5rem; }
+  .note { margin-top: 2rem; }
+  @media (hover: hover) { a.card:hover { transform: translateY(-3px); } a.card:hover .link { background-size: 100% 2px; } }
+  @media (max-width: 767px) { .cars { grid-template-columns: 1fr; } }
+</style>

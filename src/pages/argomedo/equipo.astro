@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../data/site';
+
+import equipo from '../../../assets/fotos-originales/biblioteca/2011-09/equipo_aromedo.jpg';
+import bodega from '../../../assets/fotos-originales/biblioteca/2011-09/Trabajadores-Bodega.jpg';
+import parche from '../../../assets/fotos-originales/biblioteca/2011-09/argomedo_equipo_trabajo.jpg';
+
+const years = new Date().getFullYear() - site.founded;
+---
+<Base
+  title="Nuestro equipo"
+  description={`Más de ${years} años de experiencia en mecánica de autos de lujo y deportivos. Conoce al equipo de Argomedo Performance en Recoleta, Santiago.`}
+>
+  <PageHeader section="argomedo" label="Equipo" title="Un equipo para ti." lead={`Más de ${years} años de experiencia reflejados en un equipo de profesionales que te entrega la mejor calidad y seguridad.`} />
+
+  <section class="container">
+    <div class="photo lead-photo" data-reveal>
+      <Image src={equipo} alt="Equipo completo de Argomedo Performance en el showroom" width={556} sizes="(max-width: 1280px) 100vw, 1200px" loading="eager" />
+    </div>
+  </section>
+
+  <section class="section container prose center" aria-label="Sobre el equipo">
+    <p class="t-h3" data-reveal>Trabajo de alta precisión,<br /><span class="t-soft">donde tú eres parte.</span></p>
+    <p class="t-lead" data-reveal style="--d:80ms">Nuestras instalaciones cuentan con la más alta tecnología y un servicio personalizado, en el cual puedes confiar en todo momento. Cada auto que entra al taller lo atiende directamente nuestro equipo, desde el diagnóstico hasta la entrega.</p>
+    <dl class="stats" data-reveal style="--d:140ms">
+      <div><dd class="num">{site.founded}</dd><dt>Año de fundación</dt></div>
+      <div><dd class="num">{years}+</dd><dt>Años de oficio</dt></div>
+      <div><dd class="num">{site.area}</dd><dt>De instalaciones</dt></div>
+    </dl>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container duo">
+      <figure class="tile tile--white" data-reveal>
+        <figcaption class="tile__text"><p class="label">Bodega de repuestos</p><h2 class="t-h4">Repuestos y piezas a mano, en el mismo taller.</h2></figcaption>
+        <div class="tile__media photo"><Image src={bodega} alt="Trabajadores de Argomedo Performance en la bodega de repuestos" width={850} loading="lazy" /></div>
+      </figure>
+      <figure class="tile tile--white" data-reveal style="--d:80ms">
+        <figcaption class="tile__text"><p class="label">Garantía profesional</p><h2 class="t-h4">El legado de don {site.founder}, desde {site.founded}.</h2></figcaption>
+        <div class="tile__media photo"><Image src={parche} alt="Escudo de Argomedo Performance bordado en el uniforme del equipo" width={556} loading="lazy" /></div>
+      </figure>
+    </div>
+    <div class="container center next">
+      <a class="btn btn--primary" href="/argomedo/historia/">Conoce nuestra historia <Icon name="arrow" /></a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .lead-photo { aspect-ratio: 16 / 9; border-radius: var(--radius-l); }
+  .prose { display: grid; justify-items: center; gap: 1.5rem; max-width: 44rem; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; width: 100%; margin-top: 1.5rem; padding-top: 2rem; border-top: 1px solid var(--hairline); }
+  .stats div { display: grid; gap: 0.25rem; }
+  .stats dd { font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem); font-weight: 500; }
+  .stats dt { font-size: var(--fs-small); color: var(--text-2); }
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .next { margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+  @media (max-width: 767px) { .duo { grid-template-columns: 1fr; } .lead-photo { aspect-ratio: 4 / 3; } }
+</style>

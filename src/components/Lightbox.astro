@@ -1,0 +1,73 @@
+---
+// Visor de fotos a pantalla completa para enlaces con data-lightbox="grupo".
+// Sin JS, los enlaces abren la foto original directamente.
+---
+<dialog class="lb" data-lb aria-label="Visor de fotos">
+  <figure class="lb__fig">
+    <img data-lb-img alt="" />
+    <figcaption class="t-small" data-lb-cap></figcaption>
+  </figure>
+  <button class="lb__btn lb__close" data-lb-close aria-label="Cerrar">✕</button>
+  <button class="lb__btn lb__prev" data-lb-prev aria-label="Foto anterior">‹</button>
+  <button class="lb__btn lb__next" data-lb-next aria-label="Foto siguiente">›</button>
+  <p class="lb__count label num" data-lb-count></p>
+</dialog>
+
+<style>
+  .lb { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgb(255 255 255 / 0.96); color: var(--text); }
+  .lb::backdrop { background: rgb(255 255 255 / 0.9); backdrop-filter: blur(12px); }
+  .lb[open] { display: grid; place-items: center; animation: lb-in var(--dur) var(--ease-out); }
+  @keyframes lb-in { from { opacity: 0; } }
+  .lb__fig { display: grid; gap: 0.75rem; justify-items: center; padding: 4rem 1rem; max-width: 100%; }
+  .lb__fig img { max-width: min(92vw, 1100px); max-height: 78dvh; width: auto; height: auto; border-radius: var(--radius-m); box-shadow: 0 20px 60px rgb(0 0 0 / 0.18); touch-action: pan-y; }
+  .lb__btn { position: absolute; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: var(--ink); font-size: 1.25rem; transition: background-color var(--dur-fast); }
+  .lb__btn:hover { background: var(--surface-2); }
+  .lb__close { top: max(1rem, env(safe-area-inset-top)); right: 1rem; font-size: 0.9rem; }
+  .lb__prev { left: 1rem; top: 50%; transform: translateY(-50%); }
+  .lb__next { right: 1rem; top: 50%; transform: translateY(-50%); }
+  .lb__count { position: absolute; bottom: max(1rem, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); }
+  @media (max-width: 599px) { .lb__prev, .lb__next { top: auto; bottom: max(0.75rem, env(safe-area-inset-bottom)); transform: none; } }
+</style>
+
+<script>
+  const dlg = document.querySelector<HTMLDialogElement>('[data-lb]');
+  if (dlg) {
+    const img = dlg.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const cap = dlg.querySelector<HTMLElement>('[data-lb-cap]')!;
+    const count = dlg.querySelector<HTMLElement>('[data-lb-count]')!;
+    let items: HTMLAnchorElement[] = [];
+    let i = 0;
+    const render = () => {
+      const a = items[i];
+      img.src = a.href;
+      img.alt = a.querySelector('img')?.alt ?? '';
+      cap.textContent = a.dataset.caption ?? img.alt;
+      count.textContent = items.length > 1 ? `${i + 1} / ${items.length}` : '';
+      dlg.querySelectorAll<HTMLElement>('[data-lb-prev],[data-lb-next]').forEach((b) => (b.hidden = items.length < 2));
+    };
+    const go = (d: number) => { i = (i + d + items.length) % items.length; render(); };
+    document.addEventListener('click', (e) => {
+      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[data-lightbox]');
+      if (!a) return;
+      e.preventDefault();
+      items = [...document.querySelectorAll<HTMLAnchorElement>(`a[data-lightbox="${a.dataset.lightbox}"]`)];
+      i = items.indexOf(a);
+      render();
+      dlg.showModal();
+    });
+    dlg.querySelector('[data-lb-close]')!.addEventListener('click', () => dlg.close());
+    dlg.querySelector('[data-lb-prev]')!.addEventListener('click', () => go(-1));
+    dlg.querySelector('[data-lb-next]')!.addEventListener('click', () => go(1));
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') go(-1); if (e.key === 'ArrowRight') go(1); });
+    // deslizar en el teléfono
+    let x0: number | null = null;
+    img.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), { passive: true });
+    img.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+      x0 = null;
+    });
+  }
+</script>

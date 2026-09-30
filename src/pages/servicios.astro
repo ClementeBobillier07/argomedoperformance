@@ -1,0 +1,69 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+import { servicios } from '../data/content';
+
+import autos from '../../assets/fotos-originales/biblioteca/2011-09/argomedo_automoviles.jpg';
+import sala from '../../assets/fotos-originales/biblioteca/2011-09/sala_reuniones_argomedo_3.jpg';
+import bodega from '../../assets/fotos-originales/biblioteca/2011-09/Trabajadores-Bodega.jpg';
+---
+<Base
+  title="Servicios: mecánica, repuestos e importación"
+  description="Mecánica de alto rendimiento, repuestos originales e importación directa para autos de lujo, deportivos y clásicos en Recoleta, Santiago."
+>
+  <PageHeader label="Servicios" title="Ingeniería automotriz" soft="y mecánica de alta calidad." lead="Todo lo que tu auto necesita, en un solo lugar y con el respaldo de un taller familiar desde 1970." />
+
+  <section class="container services" aria-label="Nuestros servicios">
+    {servicios.map((s, i) => (
+      <article id={s.id} class="service" data-reveal style={`--d:${i * 70}ms`}>
+        <div class="service__text">
+          <p class="label">{s.title}</p>
+          <h2 class="t-h3">{s.lead}</h2>
+          <p class="t-body">{s.text}</p>
+          <a class="btn btn--primary" href={`/contacto/?motivo=${s.motivo}`}>Cotizar {s.title.toLowerCase()} <Icon name="arrow" /></a>
+        </div>
+        <div class="service__media photo"><Image src={s.photo.src} alt={s.photo.alt} width={Math.min(s.photo.src.width, 800)} loading={i === 0 ? 'eager' : 'lazy'} /></div>
+      </article>
+    ))}
+  </section>
+
+  <section class="section section--tint" aria-labelledby="inst-t">
+    <div class="container">
+      <header class="head center">
+        <p class="label">{site.address.street} · {site.address.locality}</p>
+        <h2 id="inst-t" class="t-h2">Instalaciones.</h2>
+        <p class="t-lead">Oficinas, taller mecánico y taller de fabricación de partes y piezas, en el mismo lugar desde nuestros inicios.</p>
+      </header>
+      <div class="gallery" data-reveal>
+        <div class="photo g1"><Image src={autos} alt="Showroom con autos deportivos" width={556} loading="lazy" /></div>
+        <div class="photo g2"><Image src={sala} alt="Vitrina de maquetas en la sala de reuniones" width={556} loading="lazy" /></div>
+        <div class="photo g3"><Image src={bodega} alt="Bodega de repuestos del taller" width={850} loading="lazy" /></div>
+      </div>
+      <div class="center actions">
+        <a class="btn btn--secondary" href="/contacto/ubicacion/">Cómo llegar <Icon name="arrow" /></a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .services { display: grid; gap: 1rem; padding-bottom: var(--section); }
+  .service { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(1.5rem, 4vw, 3rem); background: var(--surface); border-radius: var(--radius-l); padding: clamp(0.75rem, 1.5vw, 1rem); scroll-margin-top: calc(var(--nav-h) + 1rem); }
+  .service:nth-child(even) .service__media { order: -1; }
+  .service__text { display: grid; justify-items: start; gap: 0.85rem; padding: clamp(1.25rem, 3vw, 2.5rem); }
+  .service__text .btn { margin-top: 0.5rem; }
+  .service__media { aspect-ratio: 3 / 2; border-radius: calc(var(--radius-l) - 8px); }
+  @media (max-width: 899px) {
+    .service { grid-template-columns: 1fr; }
+    .service:nth-child(even) .service__media { order: 0; }
+    .service__text { padding: 1.25rem 1rem 0.5rem; }
+  }
+  .gallery { display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: 1fr 1fr; gap: 1rem; aspect-ratio: 16 / 8; }
+  .gallery .photo { border-radius: var(--radius-m); }
+  .g1 { grid-row: 1 / 3; }
+  .actions { margin-top: 2rem; }
+  @media (max-width: 767px) { .gallery { grid-template-columns: 1fr; grid-template-rows: none; aspect-ratio: auto; } .gallery .photo { aspect-ratio: 3 / 2; } .g1 { grid-row: auto; } }
+</style>

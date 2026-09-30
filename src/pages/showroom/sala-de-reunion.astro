@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../data/site';
+
+import sala1 from '../../../assets/fotos-originales/biblioteca/2011-09/sala_reuniones_argomedo_1.jpg';
+import sala2 from '../../../assets/fotos-originales/biblioteca/2011-09/sala_reuniones_argomedo_2.jpg';
+import sala3 from '../../../assets/fotos-originales/biblioteca/2011-09/sala_reuniones_argomedo_3.jpg';
+---
+<Base
+  title="Sala de reunión"
+  description="Negocios, compra y venta de autos de lujo en nuestra sala de reuniones en Recoleta. Te ofrecemos nuestro respaldo y experiencia en cada decisión."
+>
+  <PageHeader section="showroom" label="Sala de reunión" title="Como en casa." lead="Pensamos en tu tranquilidad, tu seguridad y tu futuro." />
+
+  <section class="container">
+    <div class="photo wide" data-reveal><Image src={sala1} alt="Sala de reuniones de Argomedo Performance, vista panorámica" width={556} sizes="(max-width: 1280px) 100vw, 1200px" loading="eager" /></div>
+    <div class="pair">
+      <div class="photo" data-reveal><Image src={sala2} alt="Sillones y mesa de centro de la sala de reuniones" width={556} loading="lazy" /></div>
+      <div class="photo" data-reveal style="--d:80ms"><Image src={sala3} alt="Vitrina con maquetas de autos en la sala de reuniones" width={556} loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section class="section container center prose">
+    <p class="t-lead" data-reveal>Nuestra sala de reuniones está equipada con todo lo que necesitas para hacer negocios, comprar o vender tu auto. Te ofrecemos nuestro respaldo y experiencia en cada decisión.</p>
+    <p class="t-h3" data-reveal style="--d:80ms">Te aseguramos que te sentirás como en casa.</p>
+    <div class="actions" data-reveal style="--d:140ms">
+      <a class="btn btn--primary" href="/contacto/?motivo=reunion">Agendar una reunión <Icon name="arrow" /></a>
+      <a class="btn btn--secondary" href="/showroom/autos-en-venta/">Ver autos en venta</a>
+    </div>
+    <p class="t-small">{site.address.street}, {site.address.locality} · <a class="link" href="/contacto/ubicacion/">Cómo llegar <Icon name="arrow" /></a></p>
+  </section>
+</Base>
+
+<style>
+  .wide { aspect-ratio: 556 / 219; border-radius: var(--radius-l); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+  .pair .photo { aspect-ratio: 3 / 2; border-radius: var(--radius-l); }
+  .prose { display: grid; justify-items: center; gap: 1.5rem; max-width: 44rem; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
+  @media (max-width: 767px) { .pair { grid-template-columns: 1fr; } .wide { aspect-ratio: 16 / 9; } }
+</style>
