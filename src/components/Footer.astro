@@ -1,0 +1,63 @@
+---
+import Icon from './Icon.astro';
+import { nav, site } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <a href="/" class="footer__brand" aria-label={`${site.name}, inicio`}>
+        <img src="/brand/escudo-color.png" alt={`Escudo ${site.name}`} width="72" height="58" loading="lazy" />
+        <p class="t-small">Ingeniería automotriz y mecánica de alto rendimiento. Empresa familiar en Recoleta desde {site.founded}.</p>
+      </a>
+
+      <div class="footer__col">
+        <h2 class="label">Contacto</h2>
+        <a href={site.phoneHref}><Icon name="phone" size={16} />{site.phone}</a>
+        <a href={`mailto:${site.email}`}><Icon name="mail" size={16} />{site.email}</a>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="label">Dirección</h2>
+        <address>{site.address.street},<br />{site.address.locality}, {site.address.city}</address>
+        <div class="footer__maps">
+          <a class="btn btn--sm btn--ghost" href={site.mapsUrl} target="_blank" rel="noopener"><Icon name="maps" size={16} />Google Maps</a>
+          <a class="btn btn--sm btn--ghost" href={site.wazeUrl} target="_blank" rel="noopener"><Icon name="waze" size={16} />Waze</a>
+        </div>
+      </div>
+
+      <nav class="footer__col footer__nav" aria-label="Pie de página">
+        <h2 class="label">Menú</h2>
+        <ul>
+          {nav.flatMap((n) => (n.children ? n.children : [n])).filter((v, i, a) => a.findIndex((x) => x.href === v.href) === i).map((l) => (
+            <li><a href={l.href}>{l.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="t-muted">© {year} {site.name}. Todos los derechos reservados.</p>
+      <p class="t-muted num">RECOLETA · SANTIAGO · CHILE · DESDE {site.founded}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--ink-900); border-top: 1px solid var(--hairline); padding-block: clamp(4rem, 8vw, 6.5rem) 2rem; font-size: 0.9375rem; }
+  .footer__top { display: grid; gap: 3rem; grid-template-columns: 1.4fr repeat(3, 1fr); }
+  .footer__brand { display: grid; gap: 1.25rem; max-width: 20rem; align-content: start; }
+  .footer__brand img { width: 72px; }
+  .footer__col { display: grid; gap: 0.75rem; align-content: start; color: var(--text-2); }
+  .footer__col .label { margin-bottom: 0.5rem; color: var(--text-3); }
+  .footer__col a { display: inline-flex; align-items: center; gap: 0.6rem; transition: color var(--dur-fast); }
+  .footer__col a:hover { color: var(--text); }
+  address { font-style: normal; }
+  .footer__maps { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+  .footer__maps .btn { color: var(--text); }
+  .footer__nav ul { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem 1.5rem; }
+  .footer__bottom { margin-top: clamp(3rem, 6vw, 5rem); padding-top: 1.5rem; border-top: 1px solid var(--hairline); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-size: 0.8125rem; }
+  .footer__bottom .num { font-size: 0.6875rem; letter-spacing: 0.16em; }
+  @media (max-width: 1023px) { .footer__top { grid-template-columns: 1fr 1fr; } .footer__brand { grid-column: 1 / -1; } }
+  @media (max-width: 599px) { .footer__top { grid-template-columns: 1fr; } }
+</style>

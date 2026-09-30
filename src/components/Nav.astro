@@ -1,0 +1,171 @@
+---
+import Icon from './Icon.astro';
+import { nav, site, waLink } from '../data/site';
+
+const path = Astro.url.pathname;
+const isActive = (item: (typeof nav)[number]) =>
+  item.href === '/' ? path === '/' : [item.href, ...(item.children?.map((c) => c.href) ?? [])].some((h) => path.startsWith(h.replace(/\/$/, '')));
+---
+<header class="nav" data-nav data-state="top">
+  <div class="nav__bar container">
+    <a href="/" class="nav__brand" aria-label={`${site.name}, ir al inicio`}>
+      <img src="/brand/escudo-blanco.png" alt="" width="40" height="32" />
+      <span class="nav__word">Argomedo<span>Performance</span></span>
+    </a>
+
+    <nav class="nav__links" aria-label="Principal">
+      <ul>
+        {nav.map((item) => (
+          <li><a href={item.href} aria-current={isActive(item) ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="nav__cta">
+      <a class="btn btn--sm btn--glass" href="/contacto/?motivo=reunion">Agendar visita</a>
+    </div>
+
+    <button class="nav__toggle" aria-expanded="false" aria-controls="menu" data-nav-toggle>
+      <span class="sr-only">Abrir menú</span>
+      <span class="nav__burger" aria-hidden="true"><i></i><i></i></span>
+    </button>
+  </div>
+
+  <!-- Menú a pantalla completa (móvil), estilo Spyker -->
+  <div class="menu" id="menu" data-menu hidden>
+    <nav class="menu__inner container" aria-label="Menú">
+      <ul class="menu__list">
+        {nav.map((item, i) => (
+          <li style={`--i:${i}`}>
+            <a href={item.href} aria-current={isActive(item) ? 'page' : undefined}>{item.label}</a>
+            {item.children && (
+              <ul class="menu__sub">
+                {item.children.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+      <div class="menu__foot">
+        <a href={site.phoneHref}><Icon name="phone" size={18} /> {site.phone}</a>
+        <a href={waLink()} target="_blank" rel="noopener"><Icon name="whatsapp" size={18} /> WhatsApp</a>
+        <a href={site.mapsUrl} target="_blank" rel="noopener"><Icon name="pin" size={18} /> {site.address.street}, {site.address.locality}</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    height: var(--nav-h);
+    transition: transform var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
+  }
+  /* Material translúcido al hacer scroll; transparente sobre el hero */
+  .nav::before {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: var(--glass);
+    backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: inset 0 -1px 0 var(--hairline);
+    opacity: 0; transition: opacity var(--dur) var(--ease-out);
+  }
+  .nav[data-state='top']::before { opacity: 0; }
+  .nav[data-state='top'] { background: linear-gradient(180deg, rgb(10 10 11 / 0.55), rgb(10 10 11 / 0)); }
+  .nav[data-state='scrolled']::before, .nav[data-state='hidden']::before { opacity: 1; }
+  .nav[data-state='hidden'] { transform: translateY(-100%); }
+
+  .nav__bar { height: 100%; display: flex; align-items: center; gap: 2rem; }
+  .nav__brand { display: flex; align-items: center; gap: 0.75rem; flex: none; }
+  .nav__brand img { width: 40px; height: auto; }
+  .nav__word { display: flex; flex-direction: column; line-height: 1; font-weight: 640; letter-spacing: -0.02em; font-size: 1rem; }
+  .nav__word span { font-family: var(--font-mono); font-size: 0.625rem; font-weight: 450; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-2); margin-top: 0.3rem; }
+
+  .nav__links { margin-inline: auto; }
+  .nav__links ul { display: flex; gap: 0.25rem; list-style: none; padding: 0; }
+  .nav__links a {
+    position: relative; display: block; padding: 0.5rem 0.9rem;
+    font-size: 0.875rem; font-weight: 480; color: var(--text-2);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .nav__links a:hover { color: var(--text); }
+  .nav__links a[aria-current='page'] { color: var(--text); }
+  /* Punto amarillo = página activa */
+  .nav__links a[aria-current='page']::after {
+    content: ''; position: absolute; left: 50%; bottom: -2px; width: 4px; height: 4px;
+    border-radius: 50%; background: var(--accent); transform: translateX(-50%);
+  }
+
+  .nav__toggle { display: none; width: 44px; height: 44px; margin-left: auto; place-items: center; }
+  .nav__burger { position: relative; width: 22px; height: 12px; display: block; }
+  .nav__burger i { position: absolute; left: 0; right: 0; height: 1.6px; background: currentColor; border-radius: 2px; transition: transform var(--dur) var(--ease-out), top var(--dur) var(--ease-out); }
+  .nav__burger i:first-child { top: 0; }
+  .nav__burger i:last-child { top: 10px; }
+  [aria-expanded='true'] .nav__burger i:first-child { top: 5px; transform: rotate(45deg); }
+  [aria-expanded='true'] .nav__burger i:last-child { top: 5px; transform: rotate(-45deg); }
+
+  .menu {
+    position: fixed; inset: 0; z-index: -1;
+    background: rgb(10 10 11 / 0.94);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    padding-top: calc(var(--nav-h) + 2rem);
+    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+    overflow-y: auto; overscroll-behavior: contain;
+    opacity: 0; transition: opacity var(--dur) var(--ease-out);
+  }
+  .menu.is-open { opacity: 1; }
+  .menu__inner { min-height: 100%; display: flex; flex-direction: column; justify-content: space-between; gap: 3rem; }
+  .menu__list { list-style: none; padding: 0; display: grid; gap: 1.25rem; }
+  .menu__list > li { opacity: 0; transform: translateY(16px); transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out); transition-delay: calc(var(--i) * 45ms + 60ms); }
+  .menu.is-open .menu__list > li { opacity: 1; transform: none; }
+  .menu__list > li > a { font-size: clamp(2.25rem, 9vw, 3.5rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1.05; }
+  .menu__list > li > a[aria-current='page'] { color: var(--text); }
+  .menu__list > li > a[aria-current='page']::after { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-left: 0.5rem; vertical-align: 0.5em; }
+  .menu__sub { list-style: none; padding: 0.5rem 0 0; display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+  .menu__sub a { font-size: 0.9375rem; color: var(--text-2); }
+  .menu__foot { display: grid; gap: 0.9rem; padding-top: 1.5rem; border-top: 1px solid var(--hairline); }
+  .menu__foot a { display: flex; align-items: center; gap: 0.7rem; color: var(--text-2); font-size: 0.9375rem; }
+
+  @media (max-width: 1023px) {
+    .nav__links, .nav__cta { display: none; }
+    .nav__toggle { display: grid; }
+  }
+  @media (min-width: 1024px) { .menu { display: none !important; } }
+</style>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-nav]')!;
+  const toggle = nav.querySelector<HTMLButtonElement>('[data-nav-toggle]')!;
+  const menu = nav.querySelector<HTMLElement>('[data-menu]')!;
+  let lastY = window.scrollY;
+  let open = false;
+
+  // Transparente arriba → vidrio al bajar → se esconde bajando, reaparece subiendo
+  const onScroll = () => {
+    if (open) return;
+    const y = window.scrollY;
+    const state = y < 24 ? 'top' : y > lastY && y > 400 ? 'hidden' : 'scrolled';
+    if (nav.dataset.state !== state) nav.dataset.state = state;
+    lastY = y;
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const setOpen = (v: boolean) => {
+    open = v;
+    toggle.setAttribute('aria-expanded', String(v));
+    toggle.querySelector('.sr-only')!.textContent = v ? 'Cerrar menú' : 'Abrir menú';
+    document.documentElement.style.overflow = v ? 'hidden' : '';
+    if (v) {
+      menu.hidden = false;
+      nav.dataset.state = 'scrolled';
+      requestAnimationFrame(() => menu.classList.add('is-open'));
+    } else {
+      menu.classList.remove('is-open');
+      setTimeout(() => { if (!open) menu.hidden = true; }, 420);
+      onScroll();
+    }
+  };
+  toggle.addEventListener('click', () => setOpen(!open));
+  menu.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) setOpen(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) { setOpen(false); toggle.focus(); } });
+</script>

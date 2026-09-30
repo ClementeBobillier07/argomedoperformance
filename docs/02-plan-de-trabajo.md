@@ -1,6 +1,6 @@
 # Plan de trabajo: rediseño de argomedoperformance.cl
 
-> Estado: **borrador para discutir**. No hay código escrito todavía.
+> Estado: **aprobado el 30-09-2026**. Fase 1 en curso.
 > Base: [análisis del sitio actual](01-analisis-sitio-actual.md) · [inventario de fotos](../assets/fotos-originales/README.md)
 
 ## 1. Objetivo
@@ -123,12 +123,12 @@ Cada fase termina con una **URL de preview** para revisarla en el celular y apro
 - Se elimina el lorem ipsum de Importación y se ocultan las páginas de ejemplo, la Tienda vacía y el link a Testimonios (404).
 - Teléfono y email clicables, y los títulos pasan a ser texto real en lugar de imágenes.
 
-## 8. Decisiones que necesito de ti
+## 8. Decisiones tomadas (30-09-2026)
 
-1. **“Más oscura”:** ¿te refieres a que **el sitio sea oscuro** (mi propuesta) o a que **el amarillo sea más oscuro**? ¿O ambas?
-2. **Tipografía:** A (Apple puro, recomendada), B (condensada racing) o C (serif editorial).
-3. **Fotos del hero:** ¿apruebas el upscale con IA como solución provisional? ¿Puede Argomedo enviarnos fotos de los autos que tienen hoy?
-4. **Marcas en el hero:** ¿cuáles van? ¿Se mantiene Hummer?
-5. **Copy:** ¿lo dejamos 100 % igual (solo corrigiendo errores) o me permites pulir levemente los titulares, manteniendo el sentido?
-6. **Extras de UX:** ¿agregamos un botón de WhatsApp flotante y botones de Waze/Maps? (Son links nuevos, pero no cambian el flujo.)
-7. **Stack y preview:** ¿Astro estático con preview en Vercel/Netlify (tendrías que conectar la cuenta una vez) o prefieres otra cosa?
+1. **Sitio oscuro.** El amarillo `#FFEC00` se mantiene igual, pero **solo para acentos**.
+2. **Tipografía A (Apple puro).** Se usa *Geist* (display y texto) con *Geist Mono* para etiquetas y cifras.
+3. **Upscale con IA aprobado.** Real-ESRGAN ×4 → `assets/fotos-hd/`.
+4. **Marcas del hero:** Porsche, BMW, Hummer, Shelby, Corvette y Mercedes-Benz.
+5. **Copy:** se puede pulir todo lo necesario, con foco en el SEO.
+6. **WhatsApp flotante y botones de Waze/Maps:** se agregan.
+7. **Stack:** Astro estático con preview en Vercel/Netlify.
