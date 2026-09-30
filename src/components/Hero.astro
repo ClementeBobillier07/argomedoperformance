@@ -1,6 +1,5 @@
 ---
 import { Picture } from 'astro:assets';
-import Icon from './Icon.astro';
 import { brands } from '../data/site';
 
 // Solo fotos originales de Argomedo (sin retoque ni IA)
@@ -38,25 +37,23 @@ const slides = [
 
     <div class="hero__content">
       <p class="label hero__kicker"><span class="dot"></span>Recoleta · Santiago · Desde 1970</p>
-      <h1 class="t-hero hero__title">Mecánica de alto rendimiento para autos de lujo.</h1>
+      <h1 class="hero__title">Mecánica de alto rendimiento para autos de lujo.</h1>
       <p class="hero__lead">Taller familiar especializado en autos deportivos y clásicos, con garantía profesional.</p>
       <div class="hero__ctas">
         <a class="btn btn--light" href="/showroom/autos-en-venta/">Ver showroom</a>
-        <a class="btn btn--glass" href="/contacto/">Contáctenos <Icon name="arrow" /></a>
+        <a class="btn btn--glass" href="/contacto/">Contáctenos</a>
       </div>
-    </div>
-
-    <div class="hero__foot">
-      <ul class="hero__brands" aria-label="Marcas con las que trabajamos">
-        {brands.map((b) => (
-          <li><img src={b.src} alt={b.name} style={`--h:${b.h}px`} /></li>
-        ))}
-      </ul>
       <div class="hero__bars" aria-hidden="true">
         {slides.map((_, i) => <i class:list={{ 'is-active': i === 0 }}><b></b></i>)}
       </div>
       <p class="sr-only" aria-live="polite" data-slide-caption>{slides[0].caption}</p>
     </div>
+
+    <ul class="hero__brands" aria-label="Marcas con las que trabajamos">
+      {brands.map((b) => (
+        <li><img src={b.src} alt={b.name} /></li>
+      ))}
+    </ul>
   </div>
 </section>
 
@@ -66,7 +63,8 @@ const slides = [
     position: relative; isolation: isolate; overflow: hidden;
     border-radius: var(--radius-l);
     min-height: min(82svh, 780px);
-    display: grid; grid-template-rows: 1fr auto;
+    display: grid; grid-template-columns: 1fr auto; gap: 2rem;
+    padding: clamp(1.5rem, 3.5vw, 3rem);
     color: var(--on-photo); background: var(--ink);
   }
   .hero__media { position: absolute; inset: 0; z-index: -1; }
@@ -75,45 +73,46 @@ const slides = [
   .hero__slide :global(picture), .hero__slide :global(img) { width: 100%; height: 100%; object-fit: cover; }
   .hero__slide :global(img) { transform: scale(1.04); transition: transform 8s linear; }
   .hero__slide.is-active :global(img) { transform: scale(1); }
+  /* Degradado solo abajo a la izquierda (texto) y en el borde derecho (logos): la foto queda limpia */
   .hero__scrim {
     position: absolute; inset: 0;
     background:
-      radial-gradient(90% 60% at 50% 38%, rgb(0 0 0 / 0.42) 0%, rgb(0 0 0 / 0.12) 70%, rgb(0 0 0 / 0) 100%),
-      linear-gradient(180deg, rgb(0 0 0 / 0.25) 0%, rgb(0 0 0 / 0) 30%, rgb(0 0 0 / 0) 60%, rgb(0 0 0 / 0.55) 100%);
+      radial-gradient(120% 70% at 0% 100%, rgb(0 0 0 / 0.62) 0%, rgb(0 0 0 / 0.25) 45%, rgb(0 0 0 / 0) 70%),
+      linear-gradient(270deg, rgb(0 0 0 / 0.35) 0%, rgb(0 0 0 / 0) 18%);
   }
 
-  .hero__content {
-    align-self: center; justify-self: center; text-align: center;
-    max-width: 44rem; padding: 4rem 1.5rem 2rem;
-    display: grid; justify-items: center; gap: 1rem;
-  }
-  .hero__kicker { color: rgb(255 255 255 / 0.9); }
-  .hero__title { color: var(--on-photo); text-shadow: 0 1px 24px rgb(0 0 0 / 0.25); }
-  .hero__lead { font-size: var(--fs-lead); color: rgb(255 255 255 / 0.86); max-width: 32rem; text-wrap: balance; }
-  .hero__ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 0.75rem; }
-
-  .hero__foot { display: grid; justify-items: center; gap: 1.1rem; padding: 0 1.5rem max(1.5rem, env(safe-area-inset-bottom)); }
-  .hero__brands { list-style: none; padding: 0; display: flex; align-items: center; justify-content: center; gap: clamp(1.25rem, 3vw, 2.5rem); flex-wrap: wrap; }
-  .hero__brands img { width: auto; height: calc(var(--h) * 0.85); opacity: 0.85; }
-  .hero__bars { display: flex; gap: 6px; }
+  /* Texto abajo a la izquierda */
+  .hero__content { align-self: end; justify-self: start; max-width: 30rem; display: grid; justify-items: start; gap: 0.75rem; }
+  .hero__kicker { color: rgb(255 255 255 / 0.9); font-size: 0.6875rem; }
+  .hero__title { font-size: clamp(1.625rem, 1.25rem + 1.5vw, 2.5rem); line-height: 1.08; letter-spacing: -0.03em; font-weight: 600; color: var(--on-photo); text-wrap: balance; text-shadow: 0 1px 20px rgb(0 0 0 / 0.25); }
+  .hero__lead { font-size: 0.9375rem; line-height: 1.5; color: rgb(255 255 255 / 0.85); max-width: 24rem; }
+  /* CTAs del mismo tamaño, debajo del texto */
+  .hero__ctas { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 0.5rem; width: min(100%, 22rem); }
+  .hero__ctas .btn { width: 100%; }
+  .hero__bars { display: flex; gap: 6px; margin-top: 0.75rem; }
   .hero__bars i { width: 22px; height: 2px; background: rgb(255 255 255 / 0.3); border-radius: 2px; overflow: hidden; }
   .hero__bars b { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
   .hero__bars i.is-active b { animation: bar 7000ms linear forwards; }
   @keyframes bar { to { transform: scaleX(1); } }
 
-  .hero__content > *, .hero__foot { animation: rise 1s var(--ease-out) both; }
+  /* Logos a la derecha: columna, mismo ancho, repartidos en todo el alto */
+  .hero__brands { list-style: none; padding: 0; display: flex; flex-direction: column; justify-content: space-between; align-items: center; width: 64px; }
+  .hero__brands li { width: 100%; display: grid; place-items: center; }
+  .hero__brands img { width: 100%; height: auto; max-height: 64px; object-fit: contain; opacity: 0.88; }
+
+  .hero__content > *, .hero__brands li { animation: rise 1s var(--ease-out) both; }
   .hero__content > :nth-child(2) { animation-delay: 90ms; }
   .hero__content > :nth-child(3) { animation-delay: 180ms; }
   .hero__content > :nth-child(4) { animation-delay: 270ms; }
-  .hero__foot { animation-delay: 420ms; }
+  .hero__brands li:nth-child(n) { animation-delay: calc(300ms + var(--i, 0) * 60ms); }
   @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
 
   @media (max-width: 767px) {
     .hero { padding-inline: 0.5rem; }
-    .hero__tile { min-height: calc(100svh - var(--nav-h) - 1.25rem); border-radius: var(--radius-m); }
-    .hero__content { align-self: end; padding-bottom: 1rem; }
-    .hero__brands { flex-wrap: nowrap; gap: 0.9rem; }
-    .hero__brands img { height: calc(var(--h) * 0.62); }
+    .hero__tile { min-height: calc(100svh - var(--nav-h) - 1.25rem); border-radius: var(--radius-m); padding: 1.25rem; gap: 1rem; }
+    .hero__brands { width: 38px; }
+    .hero__brands img { max-height: 38px; }
+    .hero__ctas { width: 100%; }
   }
   @media (prefers-reduced-motion: reduce) { .hero__slide :global(img) { transform: none; transition: none; } }
 </style>
